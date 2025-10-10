@@ -90,8 +90,46 @@ public class ModuloUrgStepDefinitions {
         assertThat(this.excepcionEsperada.getMessage()).isEqualTo(arg0);
     }
 
-    @Then("el sistema registra el paciente con el siguiente mensaje: {string}")
-    public void elSistemaRegistraElPacienteConElSiguienteMensaje(String arg0) {
+    @When("Ingresan a urgencia los siguientes pacientes no registrados:")
+    public void ingresanAUrgenciaLosSiguientesPacientesNoRegistrados(List<Map<String, String>> tabla) {
+        excepcionEsperada = null;
+        for  (Map<String, String> fila : tabla) {
+            String cuil  = fila.get("Cuil");
+            try{
+                dbMockeada.buscarPacientePorCuil(cuil);
+            }
+            catch (RuntimeException e){
+                this.excepcionEsperada = e;
+            }
+        }
+
+    }
+
+    @Then("el sistema registra los pacientes con sus respectivos datos en el sistema:")
+    public void elSistemaRegistraLosPacientesConSusRespectivosDatosEnElSistema(List<Map<String, String>> tabla) {
+        for (Map<String, String> fila : tabla) {
+            String cuil  = fila.get("Cuil");
+            String nombre = fila.get("Nombre");
+            String apellido = fila.get("Apellido");
+            String obraSocial =  fila.get("Obra social");
+            Paciente paciente = new  Paciente(cuil, nombre, apellido, obraSocial);
+            dbMockeada.guardarPaciente(paciente);
+        }
+    }
+
+    @And("la lista de pacientes registrados en el sistema es la siguiente:")
+    public void laListaDePacientesRegistradosEnElSistemaEsLaSiguiente( List<Map <String, String>> lista) {
+        List<Map<String,String>> pacientesRegistrados = dbMockeada.obtenerTodosLosPacientes()
+                .stream()
+                .map(paciente -> Map.of(
+                        "Cuil", paciente.getCuil(),
+                        "Nombre", paciente.getNombre(),
+                        "Apellido", paciente.getApellido(),
+                        "Obra social", paciente.getObraSocial()
+                ))
+                .toList();
+
+        assertThat(pacientesRegistrados).isEqualTo(lista);
 
     }
 }

@@ -78,9 +78,14 @@ Feature: Modulo de urgencias
             | Cuil         | Apellido | Nombre    | Obra social       |
             | 23-1234567-9 | Nunez    | Marcelo   | Subsidio de salud |
             | 27-4567890-3 | Dufour   | Alexandra | Swiss medical     |
-        When Ingresan a urgencia los siguientes pacientes:
-            | Cuil         | Informe          | Nivel de emergencia | Temperatura | Frecuencia cardiaca | Frecuencia respiratoria | Presion arterial |
-            | 30-1234567-9 | Le agarro dengue | Emergencia          | 38          | 70                  | 15                      | 120/80           |
-        Then el sistema registra el paciente con el siguiente mensaje: "Paciente no registrado, se procede a su registro"
-        And La lista de espera esta ordenada por cuil de la siguiente manera:
-            | 30-1234567-9 |
+        When Ingresan a urgencia los siguientes pacientes no registrados:
+          | Cuil         | Apellido | Nombre | Obra social |
+          | 23-1000000-9 | Pedro    | Perez  | OSDE        |
+        Then el sistema registra los pacientes con sus respectivos datos en el sistema:
+            | Cuil         | Apellido | Nombre | Obra social |
+            | 23-1000000-9 | Pedro    | Perez  | OSDE        |
+        And la lista de pacientes registrados en el sistema es la siguiente:
+          | Cuil         | Apellido | Nombre    | Obra social       |
+          | 23-1234567-9 | Nunez    | Marcelo   | Subsidio de salud |
+          | 27-4567890-3 | Dufour   | Alexandra | Swiss medical     |
+          | 23-1000000-9 | Pedro    | Perez     | OSDE              |

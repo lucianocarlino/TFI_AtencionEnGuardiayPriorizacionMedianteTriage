@@ -3,15 +3,13 @@ package mock;
 import app.interfaces.RepositorioPacientes;
 import domain.Paciente;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class DBPrueba implements RepositorioPacientes {
     private Map<String, Paciente> pacientes;
 
     public DBPrueba() {
-        this.pacientes = new HashMap<>();
+        this.pacientes = new LinkedHashMap<>();
     }
 
     @Override
@@ -22,5 +20,9 @@ public class DBPrueba implements RepositorioPacientes {
     @Override
     public Optional<Paciente> buscarPacientePorCuil(String cuil) {
         return Optional.ofNullable(pacientes.get(cuil));
+    }
+
+    public List<Paciente> obtenerTodosLosPacientes() {
+        return new ArrayList<>(pacientes.values());
     }
 }

@@ -7,7 +7,6 @@ import domain.NivelEmergencia;
 import domain.Paciente;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class ServicioUrgencias {

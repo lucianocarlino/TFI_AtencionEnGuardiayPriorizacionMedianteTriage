@@ -16,5 +16,15 @@ public class Paciente {
     public String getCuil() {
         return cuil;
     }
+    public String getNombre() {
+        return nombre;
+    }
+    public String getApellido() {
+        return apellido;
+    }
+    public String getObraSocial() {
+        return obraSocial;
+    }
+
 
 }
