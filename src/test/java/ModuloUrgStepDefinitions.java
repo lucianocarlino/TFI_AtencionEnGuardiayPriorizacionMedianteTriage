@@ -13,6 +13,7 @@ import mock.DBPrueba;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -26,6 +27,17 @@ public class ModuloUrgStepDefinitions {
     public ModuloUrgStepDefinitions() {
         this.dbMockeada = new DBPrueba();
         this.servicioUrgencias = new ServicioUrgencias(dbMockeada);
+    }
+
+    private Float parseFloatOpcional(String value) {
+        if (value == null || value.trim().isEmpty()) {
+            return null;
+        }
+        try {
+            return Float.parseFloat(value);
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 
     @Given("Que la siguiente enfermera esta registrada:")
@@ -55,19 +67,32 @@ public class ModuloUrgStepDefinitions {
     public void ingresaAUrgenciasElSiguientePaciente(List<Map<String, String>> tabla) {
         excepcionEsperada = null;
         for (Map<String, String> fila : tabla) {
+
             String cuil   = fila.get("Cuil");
             String informe = fila.get("Informe");
-            NivelEmergencia nivelEmergencia = Arrays.stream(NivelEmergencia.values()).
-                    filter( nivel -> nivel.tieneNombre(fila.get("Nivel de emergencia"))).
-                    findFirst().
-                    orElseThrow(() -> new RuntimeException("Nivel Emergencia no encontrada"));
-            Float temperatura =  Float.parseFloat(fila.get("Temperatura"));
-            Float frecuenciaCardiaca  = Float.parseFloat(fila.get("Frecuencia cardiaca"));
-            Float frecuenciaRespiratoria = Float.parseFloat(fila.get("Frecuencia respiratoria"));
-            List<Float> presionArterial = Arrays.stream(fila.get("Presion arterial").split("/")).map(Float::parseFloat).toList();
+            String nivelStr = fila.get("Nivel de emergencia");
+            NivelEmergencia nivelEmergencia = Optional.ofNullable(nivelStr)
+                    .filter(str -> !str.trim().isEmpty())
+                    .map(str -> Arrays.stream(NivelEmergencia.values())
+                            .filter(nivel -> nivel.tieneNombre(str.trim()))
+                            .findFirst()
+                            .orElseThrow(() -> new RuntimeException("Nivel Emergencia no encontrada: " + str)))
+                    .orElse(null);
+            Float temperatura =  parseFloatOpcional(fila.get("Temperatura"));
+            Float frecuenciaCardiaca  = parseFloatOpcional(fila.get("Frecuencia cardiaca"));
+            Float frecuenciaRespiratoria = parseFloatOpcional(fila.get("Frecuencia respiratoria"));
 
+            Float sistolica = null;
+            Float diastolica = null;
+            String presionStr = fila.get("Presion arterial");
+            if (presionStr != null && !presionStr.trim().isEmpty()) {
+                String[] partes = presionStr.split("/",-1);
+                sistolica = parseFloatOpcional(partes[0].trim());
+                diastolica = parseFloatOpcional(partes[1].trim());
+                System.out.println("Presion sistolica: " + sistolica + ", diastolica: " + diastolica);
+            }
             try {
-                servicioUrgencias.registrarUrgencias(cuil, enfermera, informe, nivelEmergencia, temperatura, frecuenciaCardiaca, frecuenciaRespiratoria, presionArterial.get(0),  presionArterial.get(1));
+                servicioUrgencias.registrarUrgencias(cuil, enfermera, informe, nivelEmergencia, temperatura, frecuenciaCardiaca, frecuenciaRespiratoria, sistolica, diastolica);
             } catch (RuntimeException e) {
                 this.excepcionEsperada = e;
             }

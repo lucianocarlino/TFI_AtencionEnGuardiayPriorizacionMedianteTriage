@@ -89,3 +89,64 @@ Feature: Modulo de urgencias
           | 23-1234567-9 | Nunez    | Marcelo   | Subsidio de salud |
           | 27-4567890-3 | Dufour   | Alexandra | Swiss medical     |
           | 23-1000000-9 | Pedro    | Perez     | OSDE              |
+
+  Scenario: ingreso de un paciente pero Informe fue omitido
+    Given Dado que estan registrados los siguientes pacientes en el sistema:
+      | Cuil         | Apellido | Nombre    | Obra social       |
+      | 23-1234567-9 | Nunez    | Marcelo   | Subsidio de salud |
+      | 27-4567890-3 | Dufour   | Alexandra | Swiss medical     |
+    When Ingresan a urgencia los siguientes pacientes:
+      | Cuil         | Informe | Nivel de emergencia | Temperatura | Frecuencia cardiaca | Frecuencia respiratoria | Presion arterial |
+      | 23-1234567-9 |         | Emergencia          | 38          | 100                 | 15                      | 120/80           |
+    Then el sistema muestra el siguiente mensaje de error: "El informe es un campo obligatorio"
+
+  Scenario: ingreso de un paciente pero Nivel de emergencia fue omitido
+    Given Dado que estan registrados los siguientes pacientes en el sistema:
+      | Cuil         | Apellido | Nombre    | Obra social       |
+      | 23-1234567-9 | Nunez    | Marcelo   | Subsidio de salud |
+      | 27-4567890-3 | Dufour   | Alexandra | Swiss medical     |
+    When Ingresan a urgencia los siguientes pacientes:
+      | Cuil         | Informe         | Nivel de emergencia | Temperatura | Frecuencia cardiaca | Frecuencia respiratoria | Presion arterial |
+      | 23-1234567-9 | Dolor de cabeza |                     | 38          | 100                 | 15                      | 120/80           |
+    Then el sistema muestra el siguiente mensaje de error: "El nivel de emergencia es un campo obligatorio"
+
+  Scenario: ingreso de un paciente pero Frec Cardiaca fue omitida
+        Given Dado que estan registrados los siguientes pacientes en el sistema:
+            | Cuil         | Apellido | Nombre    | Obra social       |
+            | 23-1234567-9 | Nunez    | Marcelo   | Subsidio de salud |
+            | 27-4567890-3 | Dufour   | Alexandra | Swiss medical     |
+        When Ingresan a urgencia los siguientes pacientes:
+          | Cuil         | Informe          | Nivel de emergencia | Temperatura | Frecuencia cardiaca | Frecuencia respiratoria | Presion arterial |
+          | 23-1234567-9 | Le agarro dengue | Emergencia          | 38          |                     | 15                      | 120/80           |
+        Then el sistema muestra el siguiente mensaje de error: "Frecuencia cardiaca es un campo obligatorio"
+
+
+  Scenario: ingreso de un paciente pero Frec Respiratoria fue omitido
+    Given Dado que estan registrados los siguientes pacientes en el sistema:
+      | Cuil         | Apellido | Nombre    | Obra social       |
+      | 23-1234567-9 | Nunez    | Marcelo   | Subsidio de salud |
+      | 27-4567890-3 | Dufour   | Alexandra | Swiss medical     |
+    When Ingresan a urgencia los siguientes pacientes:
+      | Cuil         | Informe          | Nivel de emergencia | Temperatura | Frecuencia cardiaca | Frecuencia respiratoria | Presion arterial |
+      | 23-1234567-9 | Le agarro dengue | Emergencia          | 38          | 100                 |                         | 120/80           |
+    Then el sistema muestra el siguiente mensaje de error: "Frecuencia respiratoria es un campo obligatorio"
+
+  Scenario: ingreso de un paciente pero frecuencia sistolica fue omitida
+    Given Dado que estan registrados los siguientes pacientes en el sistema:
+      | Cuil         | Apellido | Nombre    | Obra social       |
+      | 23-1234567-9 | Nunez    | Marcelo   | Subsidio de salud |
+      | 27-4567890-3 | Dufour   | Alexandra | Swiss medical     |
+    When Ingresan a urgencia los siguientes pacientes:
+      | Cuil         | Informe          | Nivel de emergencia | Temperatura | Frecuencia cardiaca | Frecuencia respiratoria | Presion arterial |
+      | 23-1234567-9 | Le agarro dengue | Emergencia          | 38          | 100                 | 15                      | /80               |
+    Then el sistema muestra el siguiente mensaje de error: "Frecuencia sistolica es un campo obligatorio"
+
+  Scenario: ingreso de un paciente pero frecuencia diastolica fue omitida
+    Given Dado que estan registrados los siguientes pacientes en el sistema:
+      | Cuil         | Apellido | Nombre    | Obra social       |
+      | 23-1234567-9 | Nunez    | Marcelo   | Subsidio de salud |
+      | 27-4567890-3 | Dufour   | Alexandra | Swiss medical     |
+    When Ingresan a urgencia los siguientes pacientes:
+      | Cuil         | Informe          | Nivel de emergencia | Temperatura | Frecuencia cardiaca | Frecuencia respiratoria | Presion arterial |
+      | 23-1234567-9 | Le agarro dengue | Emergencia          | 38          | 100                 | 15                      | 120/             |
+    Then el sistema muestra el siguiente mensaje de error: "Frecuencia diastolica es un campo obligatorio"

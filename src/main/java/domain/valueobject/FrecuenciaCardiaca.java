@@ -11,6 +11,11 @@ public class FrecuenciaCardiaca extends Frecuencia {
     }
 
     @Override
+    protected RuntimeException notificarCampoObligatorio() {
+        return new RuntimeException("Frecuencia cardiaca es un campo obligatorio");
+    }
+
+    @Override
     protected String getValorFormateado() {
         return String.format("%.2f lpm", this.value);
     }

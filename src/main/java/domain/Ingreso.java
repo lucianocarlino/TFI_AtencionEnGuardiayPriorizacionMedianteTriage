@@ -2,6 +2,7 @@ package domain;
 
 import domain.valueobject.FrecuenciaCardiaca;
 import domain.valueobject.FrecuenciaRespiratoria;
+import domain.valueobject.Informe;
 import domain.valueobject.TensionArterial;
 
 import java.time.LocalDateTime;
@@ -12,7 +13,7 @@ public class Ingreso implements Comparable<Ingreso>{
     Paciente paciente;
     Enfermera enfermera;
     LocalDateTime fechaIngreso;
-    String informe;
+    Informe  informe;
     NivelEmergencia nivelEmergencia;
     EstadoIngreso estado;
     Float temperatura;
@@ -32,7 +33,7 @@ public class Ingreso implements Comparable<Ingreso>{
         this.paciente = paciente;
         this.enfermera = enfermra;
         this.fechaIngreso = LocalDateTime.now();
-        this.informe = informe;
+        this.informe = new Informe(informe);
         this.nivelEmergencia = nivelEmergencia;
         this.estado = EstadoIngreso.PENDIENTE;
         this.temperatura = temperatura;

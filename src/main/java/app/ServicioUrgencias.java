@@ -5,6 +5,9 @@ import domain.Enfermera;
 import domain.Ingreso;
 import domain.NivelEmergencia;
 import domain.Paciente;
+import domain.valueobject.FrecuenciaDiastolica;
+import domain.valueobject.FrecuenciaSistolica;
+import domain.valueobject.NivelEmergenciaValue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +30,10 @@ public class ServicioUrgencias {
                                    Float frecuenciaDiastolica) {
         Paciente paciente = dbPacientes.buscarPacientePorCuil(cuilPaciente).
                 orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
-
+        try{
+        NivelEmergenciaValue nivel = new NivelEmergenciaValue(nivelEmergencia);
+            FrecuenciaSistolica frecuenciaS = new FrecuenciaSistolica(frecuenciaSistolica);
+            FrecuenciaDiastolica frecuenciaD = new FrecuenciaDiastolica(frecuenciaDiastolica);
 
         Ingreso ingreso = new Ingreso(paciente,
                 enfermera,
@@ -40,6 +46,9 @@ public class ServicioUrgencias {
                 frecuenciaDiastolica);
         listaEspera.add(ingreso);
         listaEspera.sort(Ingreso::compareTo);
+        } catch (RuntimeException e){
+            throw new RuntimeException( e.getMessage());
+        }
     }
 
     public List<Ingreso> obtenerIngresosPendientes() {

@@ -12,6 +12,11 @@ public class FrecuenciaRespiratoria extends Frecuencia {
     }
 
     @Override
+    protected RuntimeException notificarCampoObligatorio() {
+        return new IllegalArgumentException("Frecuencia respiratoria es un campo obligatorio");
+    }
+
+    @Override
     protected String getValorFormateado() {
         return String.format("%.2f rpm", this.value);
     }
