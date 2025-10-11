@@ -19,7 +19,5 @@ public enum NivelEmergencia {
         return this.nombre.equals(nombre);
     }
 
-    public int compararCon(NivelEmergencia otro) {
-        return this.prioridad.compareTo(otro.prioridad);
-    }
+
 }

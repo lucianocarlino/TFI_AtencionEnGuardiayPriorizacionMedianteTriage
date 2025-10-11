@@ -53,9 +53,7 @@ public class Ingreso implements Comparable<Ingreso>{
         return prioridad;
     }
 
-    public int compararNiveles(NivelEmergencia nivelEmergencia){
-        return this.nivelEmergencia.compararCon(nivelEmergencia);
-    }
+
 
     @Override
     public int compareTo(Ingreso o) {
