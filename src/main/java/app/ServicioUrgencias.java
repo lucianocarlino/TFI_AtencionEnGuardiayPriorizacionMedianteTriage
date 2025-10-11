@@ -31,11 +31,10 @@ public class ServicioUrgencias {
         Paciente paciente = dbPacientes.buscarPacientePorCuil(cuilPaciente).
                 orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
         try{
-        NivelEmergenciaValue nivel = new NivelEmergenciaValue(nivelEmergencia);
-            FrecuenciaSistolica frecuenciaS = new FrecuenciaSistolica(frecuenciaSistolica);
-            FrecuenciaDiastolica frecuenciaD = new FrecuenciaDiastolica(frecuenciaDiastolica);
+            NivelEmergenciaValue nivel = new NivelEmergenciaValue(nivelEmergencia);
 
-        Ingreso ingreso = new Ingreso(paciente,
+
+                Ingreso ingreso = new Ingreso(paciente,
                 enfermera,
                 informe,
                 nivelEmergencia,

@@ -49,7 +49,7 @@ public class ModuloUrgStepDefinitions {
 
     }
 
-    @Given("Dado que estan registrados los siguientes pacientes en el sistema:")
+    @Given("que estan registrados los siguientes pacientes en el sistema:")
     public void dadoQueEstanRegistradosLosSiguientesPacientesEnElSistema(List<Map<String, String>> tabla) {
         for  (Map<String, String> fila : tabla) {
             String cuil  = fila.get("Cuil");
@@ -84,12 +84,12 @@ public class ModuloUrgStepDefinitions {
 
             Float sistolica = null;
             Float diastolica = null;
-            String presionStr = fila.get("Presion arterial");
-            if (presionStr != null && !presionStr.trim().isEmpty()) {
-                String[] partes = presionStr.split("/",-1);
+            String tensionArterialStr = fila.get("Presion arterial");
+            if (tensionArterialStr != null && !tensionArterialStr.trim().isEmpty()) {
+                String[] partes = tensionArterialStr.split("/",-1);
                 sistolica = parseFloatOpcional(partes[0].trim());
                 diastolica = parseFloatOpcional(partes[1].trim());
-                System.out.println("Presion sistolica: " + sistolica + ", diastolica: " + diastolica);
+                //System.out.println("Presion sistolica: " + sistolica + ", diastolica: " + diastolica);
             }
             try {
                 servicioUrgencias.registrarUrgencias(cuil, enfermera, informe, nivelEmergencia, temperatura, frecuenciaCardiaca, frecuenciaRespiratoria, sistolica, diastolica);

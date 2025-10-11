@@ -13,6 +13,6 @@ public class NivelEmergenciaValue {
     }
 
     public NivelEmergencia getValue() {
-        return value;
+        return this.value;
     }
 }

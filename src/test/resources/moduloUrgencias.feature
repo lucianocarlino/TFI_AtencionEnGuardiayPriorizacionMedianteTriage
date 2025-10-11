@@ -9,7 +9,7 @@ Feature: Modulo de urgencias
 
 
   Scenario: Ingreso del primer paciente a la lista de espera de urgencias
-    Given Dado que estan registrados los siguientes pacientes en el sistema:
+    Given que estan registrados los siguientes pacientes en el sistema:
       | Cuil         | Apellido | Nombre    | Obra social       |
       | 23-1234567-9 | Nunez    | Marcelo   | Subsidio de salud |
       | 27-4567890-3 | Dufour   | Alexandra | Swiss medical     |
@@ -20,7 +20,7 @@ Feature: Modulo de urgencias
       | 23-1234567-9 |
 
   Scenario: Ingreso de un paciente de bajo nivel de emergencia y luego otro de mayor nivel
-    Given Dado que estan registrados los siguientes pacientes en el sistema:
+    Given que estan registrados los siguientes pacientes en el sistema:
       | Cuil         | Apellido | Nombre    | Obra social       |
       | 23-1234567-9 | Nunez    | Marcelo   | Subsidio de salud |
       | 27-4567890-3 | Dufour   | Alexandra | Swiss medical     |
@@ -34,7 +34,7 @@ Feature: Modulo de urgencias
       | 27-4563390-3 |
 
   Scenario: Ingreso de dos pacientes criticos
-    Given Dado que estan registrados los siguientes pacientes en el sistema:
+    Given que estan registrados los siguientes pacientes en el sistema:
       | Cuil         | Apellido | Nombre    | Obra social       |
       | 23-1234567-9 | Nunez    | Marcelo   | Subsidio de salud |
       | 27-4567890-3 | Dufour   | Alexandra | Swiss medical     |
@@ -48,23 +48,23 @@ Feature: Modulo de urgencias
       | 23-1234567-9 |
 
   Scenario: Ingreso un paciente sin urgencia y dos pacientes criticos
-    Given Dado que estan registrados los siguientes pacientes en el sistema:
+    Given que estan registrados los siguientes pacientes en el sistema:
       | Cuil         | Apellido | Nombre    | Obra social       |
       | 23-1234567-9 | Nunez    | Marcelo   | Subsidio de salud |
       | 27-4567890-3 | Dufour   | Alexandra | Swiss medical     |
-      | 27-4563390-3 | Estrella | Patricio  | FBSA              |
+      | 27-4563390-2 | Estrella | Patricio  | FBSA              |
     When Ingresan a urgencia los siguientes pacientes:
       | Cuil         | Informe            | Nivel de emergencia | Temperatura | Frecuencia cardiaca | Frecuencia respiratoria | Presion arterial |
-      | 27-4563390-3 | Le agarro neumonia | Sin Urgencia        | 37          | 70                  | 16                      | 120/80           |
       | 23-1234567-9 | Le agarro dengue   | Emergencia          | 38          | 70                  | 15                      | 120/80           |
+      | 27-4563390-2 | Le agarro neumonia | Sin Urgencia        | 37          | 70                  | 16                      | 120/80           |
       | 27-4567890-3 | Se cayo de un piso | Emergencia          | 39          | 90                  | 20                      | 130/90           |
     Then La lista de espera esta ordenada por cuil de la siguiente manera:
         | 23-1234567-9 |
         | 27-4567890-3 |
-        | 27-4563390-3 |
+        | 27-4563390-2 |
 
     Scenario: registrar ingreso con valores negativos en frecuencia cardiaca
-      Given Dado que estan registrados los siguientes pacientes en el sistema:
+      Given que estan registrados los siguientes pacientes en el sistema:
         | Cuil         | Apellido | Nombre    | Obra social       |
         | 23-1234567-9 | Nunez    | Marcelo   | Subsidio de salud |
         | 27-4567890-3 | Dufour   | Alexandra | Swiss medical     |
@@ -73,8 +73,19 @@ Feature: Modulo de urgencias
         | 23-1234567-9 | Le agarro dengue | Emergencia          | 38          | -70                 | 15                      | 120/80           |
       Then el sistema muestra el siguiente mensaje de error: "Frecuencia cardiaca no puede ser negativa"
 
+    Scenario: registrar ingreso con valores negativos en frecuencia respiratoria
+      Given que estan registrados los siguientes pacientes en el sistema:
+        | Cuil         | Apellido | Nombre    | Obra social       |
+        | 23-1234567-9 | Nunez    | Marcelo   | Subsidio de salud |
+        | 27-4567890-3 | Dufour   | Alexandra | Swiss medical     |
+      When Ingresan a urgencia los siguientes pacientes:
+        | Cuil         | Informe          | Nivel de emergencia | Temperatura | Frecuencia cardiaca | Frecuencia respiratoria | Presion arterial |
+        | 23-1234567-9 | Le agarro dengue | Emergencia          | 38          | 70                 | -30                      | 120/80           |
+      Then el sistema muestra el siguiente mensaje de error: "Frecuencia respiratoria no puede ser negativa"
+      
+
     Scenario: ingreso de paciente no registrado
-        Given Dado que estan registrados los siguientes pacientes en el sistema:
+        Given que estan registrados los siguientes pacientes en el sistema:
             | Cuil         | Apellido | Nombre    | Obra social       |
             | 23-1234567-9 | Nunez    | Marcelo   | Subsidio de salud |
             | 27-4567890-3 | Dufour   | Alexandra | Swiss medical     |
@@ -91,7 +102,7 @@ Feature: Modulo de urgencias
           | 23-1000000-9 | Pedro    | Perez     | OSDE              |
 
   Scenario: ingreso de un paciente pero Informe fue omitido
-    Given Dado que estan registrados los siguientes pacientes en el sistema:
+    Given que estan registrados los siguientes pacientes en el sistema:
       | Cuil         | Apellido | Nombre    | Obra social       |
       | 23-1234567-9 | Nunez    | Marcelo   | Subsidio de salud |
       | 27-4567890-3 | Dufour   | Alexandra | Swiss medical     |
@@ -101,7 +112,7 @@ Feature: Modulo de urgencias
     Then el sistema muestra el siguiente mensaje de error: "El informe es un campo obligatorio"
 
   Scenario: ingreso de un paciente pero Nivel de emergencia fue omitido
-    Given Dado que estan registrados los siguientes pacientes en el sistema:
+    Given que estan registrados los siguientes pacientes en el sistema:
       | Cuil         | Apellido | Nombre    | Obra social       |
       | 23-1234567-9 | Nunez    | Marcelo   | Subsidio de salud |
       | 27-4567890-3 | Dufour   | Alexandra | Swiss medical     |
@@ -110,8 +121,8 @@ Feature: Modulo de urgencias
       | 23-1234567-9 | Dolor de cabeza |                     | 38          | 100                 | 15                      | 120/80           |
     Then el sistema muestra el siguiente mensaje de error: "El nivel de emergencia es un campo obligatorio"
 
-  Scenario: ingreso de un paciente pero Frec Cardiaca fue omitida
-        Given Dado que estan registrados los siguientes pacientes en el sistema:
+  Scenario: ingreso de un paciente pero Frecuencia Cardiaca fue omitida
+        Given que estan registrados los siguientes pacientes en el sistema:
             | Cuil         | Apellido | Nombre    | Obra social       |
             | 23-1234567-9 | Nunez    | Marcelo   | Subsidio de salud |
             | 27-4567890-3 | Dufour   | Alexandra | Swiss medical     |
@@ -121,8 +132,8 @@ Feature: Modulo de urgencias
         Then el sistema muestra el siguiente mensaje de error: "Frecuencia cardiaca es un campo obligatorio"
 
 
-  Scenario: ingreso de un paciente pero Frec Respiratoria fue omitido
-    Given Dado que estan registrados los siguientes pacientes en el sistema:
+  Scenario: ingreso de un paciente pero Frecuencia Respiratoria fue omitido
+    Given que estan registrados los siguientes pacientes en el sistema:
       | Cuil         | Apellido | Nombre    | Obra social       |
       | 23-1234567-9 | Nunez    | Marcelo   | Subsidio de salud |
       | 27-4567890-3 | Dufour   | Alexandra | Swiss medical     |
@@ -132,7 +143,7 @@ Feature: Modulo de urgencias
     Then el sistema muestra el siguiente mensaje de error: "Frecuencia respiratoria es un campo obligatorio"
 
   Scenario: ingreso de un paciente pero frecuencia sistolica fue omitida
-    Given Dado que estan registrados los siguientes pacientes en el sistema:
+    Given que estan registrados los siguientes pacientes en el sistema:
       | Cuil         | Apellido | Nombre    | Obra social       |
       | 23-1234567-9 | Nunez    | Marcelo   | Subsidio de salud |
       | 27-4567890-3 | Dufour   | Alexandra | Swiss medical     |
@@ -142,7 +153,7 @@ Feature: Modulo de urgencias
     Then el sistema muestra el siguiente mensaje de error: "Frecuencia sistolica es un campo obligatorio"
 
   Scenario: ingreso de un paciente pero frecuencia diastolica fue omitida
-    Given Dado que estan registrados los siguientes pacientes en el sistema:
+    Given que estan registrados los siguientes pacientes en el sistema:
       | Cuil         | Apellido | Nombre    | Obra social       |
       | 23-1234567-9 | Nunez    | Marcelo   | Subsidio de salud |
       | 27-4567890-3 | Dufour   | Alexandra | Swiss medical     |

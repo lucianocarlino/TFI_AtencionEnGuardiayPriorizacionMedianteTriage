@@ -30,11 +30,12 @@ public class Ingreso implements Comparable<Ingreso>{
                    Float frecuenciaRespiratoria,
                    Float frecuenciaSistolica,
                    Float frecuenciaDiastolica){
+
         this.paciente = paciente;
         this.enfermera = enfermra;
         this.fechaIngreso = LocalDateTime.now();
         this.informe = new Informe(informe);
-        this.nivelEmergencia = nivelEmergencia;
+        this.nivelEmergencia =  nivelEmergencia;
         this.estado = EstadoIngreso.PENDIENTE;
         this.temperatura = temperatura;
         this.frecuenciaCardiaca = new FrecuenciaCardiaca(frecuenciaCardiaca);
