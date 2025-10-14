@@ -1,9 +1,6 @@
 
 import app.ServicioUrgencias;
-import domain.Enfermera;
-import domain.Ingreso;
-import domain.NivelEmergencia;
-import domain.Paciente;
+import domain.*;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -42,10 +39,13 @@ public class ModuloUrgStepDefinitions {
 
     @Given("Que la siguiente enfermera esta registrada:")
     public void queLaSiguienteEnfermeraEstaRegistrada(List<Map<String, String>> tabla) {
-        String nombre = tabla.getFirst().get("nombre");
-        String apellido = tabla.getFirst().get("apellido");
+        String cuil = tabla.getFirst().get("Cuil");
+        String nombre = tabla.getFirst().get("Nombre");
+        String apellido = tabla.getFirst().get("Apellido");
+        String correo = tabla.getFirst().get("Correo");
+        String matricula = tabla.getFirst().get("Matricula");
 
-        enfermera = new Enfermera(nombre, apellido);
+        enfermera = new Enfermera(cuil,nombre, apellido, correo, matricula);
 
     }
 
@@ -100,12 +100,18 @@ public class ModuloUrgStepDefinitions {
     }
 
     @Then("La lista de espera esta ordenada por cuil de la siguiente manera:")
-    public void laListaDeEsperaEstaOrdenadaPorCuilDeLaSiguienteManera(List<String> lista) {
-        List<String> cuilsPendientes = servicioUrgencias.obtenerIngresosPendientes()
+    public void laListaDeEsperaEstaOrdenadaPorCuilDeLaSiguienteManera(List<Map<String, String>> lista) {
+
+
+        List<Map<String, String>> ingresosPendientes = servicioUrgencias.obtenerIngresosPendientes()
                 .stream()
-                .map(Ingreso::getCuilPaciente)
+                .map(ingreso -> Map.of(
+                        "Cuil", ingreso.getCuilPaciente(),
+                        "Estado",ingreso.getEstado().getNombre()
+                ))
                 .toList();
-        assertThat(cuilsPendientes).isEqualTo(lista);
+
+        assertThat(ingresosPendientes).isEqualTo(lista);
     }
 
 

@@ -17,7 +17,8 @@ Feature: Modulo de urgencias
       | Cuil         | Informe          | Nivel de emergencia | Temperatura | Frecuencia cardiaca | Frecuencia respiratoria | Presion arterial |
       | 23-1234567-9 | Le agarro dengue | Emergencia          | 38          | 70                  | 15                      | 120/80           |
     Then La lista de espera esta ordenada por cuil de la siguiente manera:
-      | 23-1234567-9 |
+      |Cuil          | Estado     |
+      | 23-1234567-9 | Pendiente  |
 
   Scenario: Ingreso de un paciente de bajo nivel de emergencia y luego otro de mayor nivel
     Given que estan registrados los siguientes pacientes en el sistema:
@@ -30,8 +31,9 @@ Feature: Modulo de urgencias
       | 27-4563390-3 | Le duele el ojo  | Sin Urgencia        | 38          | 70                  | 15                      | 120/80           |
       | 23-1234567-9 | Le agarro dengue | Emergencia          | 38          | 70                  | 15                      | 120/80           |
     Then La lista de espera esta ordenada por cuil de la siguiente manera:
-      | 23-1234567-9 |
-      | 27-4563390-3 |
+      |Cuil          | Estado     |
+      | 23-1234567-9 |  Pendiente |
+      | 27-4563390-3 |  Pendiente |
 
   Scenario: Ingreso de dos pacientes criticos
     Given que estan registrados los siguientes pacientes en el sistema:
@@ -44,8 +46,9 @@ Feature: Modulo de urgencias
       | 27-4563390-3 | Le agarro neumonia | Emergencia          | 37          | 70                  | 16                      | 120/80           |
       | 23-1234567-9 | Le agarro dengue   | Emergencia          | 38          | 70                  | 15                      | 120/80           |
     Then La lista de espera esta ordenada por cuil de la siguiente manera:
-      | 27-4563390-3 |
-      | 23-1234567-9 |
+      |Cuil          | Estado     |
+      | 27-4563390-3 |  Pendiente |
+      | 23-1234567-9 |  Pendiente |
 
   Scenario: Ingreso un paciente sin urgencia y dos pacientes criticos
     Given que estan registrados los siguientes pacientes en el sistema:
@@ -59,9 +62,10 @@ Feature: Modulo de urgencias
       | 27-4563390-2 | Le agarro neumonia | Sin Urgencia        | 37          | 70                  | 16                      | 120/80           |
       | 27-4567890-3 | Se cayo de un piso | Emergencia          | 39          | 90                  | 20                      | 130/90           |
     Then La lista de espera esta ordenada por cuil de la siguiente manera:
-        | 23-1234567-9 |
-        | 27-4567890-3 |
-        | 27-4563390-2 |
+        |Cuil          | Estado     |
+        | 23-1234567-9 | Pendiente |
+        | 27-4567890-3 | Pendiente |
+        | 27-4563390-2 | Pendiente |
 
     Scenario: registrar ingreso con valores negativos en frecuencia cardiaca
       Given que estan registrados los siguientes pacientes en el sistema:

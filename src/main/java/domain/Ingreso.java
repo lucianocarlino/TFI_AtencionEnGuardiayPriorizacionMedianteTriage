@@ -48,6 +48,7 @@ public class Ingreso implements Comparable<Ingreso>{
         return this.paciente.getCuil();
     }
 
+
     public EstadoIngreso getEstado(){ return this.estado; }
 
     public int ObtenerPesoNivel(){
