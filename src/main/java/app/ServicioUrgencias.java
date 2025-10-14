@@ -5,9 +5,6 @@ import domain.Enfermera;
 import domain.Ingreso;
 import domain.NivelEmergencia;
 import domain.Paciente;
-import domain.valueobject.FrecuenciaDiastolica;
-import domain.valueobject.FrecuenciaSistolica;
-import domain.valueobject.NivelEmergenciaValue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +28,6 @@ public class ServicioUrgencias {
         Paciente paciente = dbPacientes.buscarPacientePorCuil(cuilPaciente).
                 orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
         try{
-            NivelEmergenciaValue nivel = new NivelEmergenciaValue(nivelEmergencia);
-
-
                 Ingreso ingreso = new Ingreso(paciente,
                 enfermera,
                 informe,

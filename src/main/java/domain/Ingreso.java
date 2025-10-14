@@ -1,9 +1,6 @@
 package domain;
 
-import domain.valueobject.FrecuenciaCardiaca;
-import domain.valueobject.FrecuenciaRespiratoria;
-import domain.valueobject.Informe;
-import domain.valueobject.TensionArterial;
+import domain.valueobject.*;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -13,7 +10,7 @@ public class Ingreso implements Comparable<Ingreso>{
     Paciente paciente;
     Enfermera enfermera;
     LocalDateTime fechaIngreso;
-    Informe  informe;
+    String  informe;
     NivelEmergencia nivelEmergencia;
     EstadoIngreso estado;
     Float temperatura;
@@ -31,11 +28,15 @@ public class Ingreso implements Comparable<Ingreso>{
                    Float frecuenciaSistolica,
                    Float frecuenciaDiastolica){
 
+        validarInformeNoNulo(informe);
+        validarNivelIngresoNoNulo(nivelEmergencia);
+        validarTemperaturaNoNulo(temperatura);
+
         this.paciente = paciente;
         this.enfermera = enfermra;
         this.fechaIngreso = LocalDateTime.now();
-        this.informe = new Informe(informe);
-        this.nivelEmergencia =  nivelEmergencia;
+        this.informe = informe;
+        this.nivelEmergencia = nivelEmergencia;
         this.estado = EstadoIngreso.PENDIENTE;
         this.temperatura = temperatura;
         this.frecuenciaCardiaca = new FrecuenciaCardiaca(frecuenciaCardiaca);
@@ -47,10 +48,30 @@ public class Ingreso implements Comparable<Ingreso>{
         return this.paciente.getCuil();
     }
 
+    public EstadoIngreso getEstado(){ return this.estado; }
+
     public int ObtenerPesoNivel(){
         List<NivelEmergencia> niveles = Arrays.stream(NivelEmergencia.values()).toList();
         int prioridad = niveles.indexOf(this.nivelEmergencia);
         return prioridad;
+    }
+
+    public void validarInformeNoNulo(String value){
+        if (value == null || value.trim().isEmpty()) {
+            throw new RuntimeException("El informe es un campo obligatorio");
+        }
+    }
+
+    public void validarNivelIngresoNoNulo(NivelEmergencia value){
+        if (value == null){
+            throw new RuntimeException("El nivel de emergencia es un campo obligatorio");
+        }
+    }
+
+    public void validarTemperaturaNoNulo(Float value){
+        if (value == null){
+            throw new RuntimeException("Temperatura es un campo obligatorio");
+        }
     }
 
 

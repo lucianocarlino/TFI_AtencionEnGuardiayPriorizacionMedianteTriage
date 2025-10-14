@@ -4,8 +4,8 @@ Feature: Modulo de urgencias
 
   Background:
     Given Que la siguiente enfermera esta registrada:
-      | Nombre | Apellido |
-      | Susana | Gimenez  |
+      | Cuil         | Nombre | Apellido | E-mail           | Matricula
+      | 23-9876543-6 | Susana | Gimenez  | susana@gmail.com | 12345
 
 
   Scenario: Ingreso del primer paciente a la lista de espera de urgencias
@@ -161,3 +161,13 @@ Feature: Modulo de urgencias
       | Cuil         | Informe          | Nivel de emergencia | Temperatura | Frecuencia cardiaca | Frecuencia respiratoria | Presion arterial |
       | 23-1234567-9 | Le agarro dengue | Emergencia          | 38          | 100                 | 15                      | 120/             |
     Then el sistema muestra el siguiente mensaje de error: "Frecuencia diastolica es un campo obligatorio"
+
+  Scenario: ingreso de un paciente pero la temperatura fue omitida
+    Given que estan registrados los siguientes pacientes en el sistema:
+      | Cuil         | Apellido | Nombre    | Obra social       |
+      | 23-1234567-9 | Nunez    | Marcelo   | Subsidio de salud |
+      | 27-4567890-3 | Dufour   | Alexandra | Swiss medical     |
+    When Ingresan a urgencia los siguientes pacientes:
+      | Cuil         | Informe          | Nivel de emergencia | Temperatura | Frecuencia cardiaca | Frecuencia respiratoria | Presion arterial |
+      | 23-1234567-9 | Le agarro dengue | Emergencia          |             | 100                 | 15                      | 120/             |
+    Then el sistema muestra el siguiente mensaje de error: "Temperatura es un campo obligatorio"
