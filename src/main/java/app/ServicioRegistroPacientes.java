@@ -31,6 +31,7 @@ public class ServicioRegistroPacientes {
             if (obraSocialNombre.trim().isEmpty()) {
                 Paciente paciente = new Paciente(cuil, nombre, apellido, afiliado, domicilio);
                 dbPacientes.guardarPaciente(paciente);
+                return;
             }
             if (obraSocialNombre != null && !obraSocialNombre.trim().isEmpty()) {
                 if (!dbPacientes.existeObraSocial(obraSocialNombre)) {

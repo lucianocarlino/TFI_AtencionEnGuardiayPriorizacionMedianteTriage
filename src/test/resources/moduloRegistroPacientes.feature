@@ -13,14 +13,17 @@ Feature: Registro de pacientes
       | Swiss medical     | SM            |
       | FBSA              | FB            |
       | OSDE              | OS            |
+    And Existen los siguientes pacientes afiliados a obras sociales:
+      | Cuil         | Obra social | Numero afiliado |
+      | 27-4567890-3 | OSDE        | 87654321        |
 
   Scenario: Registro exitoso de paciente con todos los datos mandatorios y obra social existente
     When Se intenta registrar el siguiente paciente:
       | Cuil         | Apellido | Nombre  | Calle      | Numero | Localidad | Obra social | Numero afiliado |
-      | 23-1234567-9 | Nunez    | Marcelo | San Martin | 123    | Tucuman   | OSDE        | 12345678        |
+      | 27-4567890-3 | Nunez    | Marcelo | San Martin | 123    | Tucuman   | OSDE        |  87654321        |
     Then  la lista de pacientes es :
       | Cuil         | Apellido | Nombre  | Obra social | Numero afiliado |
-      | 23-1234567-9 | Nunez    | Marcelo | OSDE        | 12345678        |
+      | 27-4567890-3 | Nunez    | Marcelo | OSDE        |  87654321        |
 
   Scenario: Registro exitoso de paciente sin obra social
     When Se intenta registrar el siguiente paciente:
