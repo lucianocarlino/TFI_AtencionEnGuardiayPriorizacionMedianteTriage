@@ -163,4 +163,5 @@ public class ModuloUrgStepDefinitions {
         assertThat(pacientesRegistrados).isEqualTo(lista);
 
     }
+
 }

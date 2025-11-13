@@ -8,4 +8,8 @@ public interface RepositorioPacientes {
     public void guardarPaciente(Paciente paciente);
 
     public Optional<Paciente> buscarPacientePorCuil(String cuil);
+
+    public boolean existeObraSocial(String obraSocialNombre);
+
+    boolean estaAfiliado(String cuil, String obraSocialNombre);
 }
