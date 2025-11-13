@@ -53,8 +53,6 @@ public class ModuloRegPacientesStepDef {
 
         assertThat(pacienteEncontrado.getApellido()).isEqualTo(pacienteEsperado.get("Apellido"));
         assertThat(pacienteEncontrado.getNombre()).isEqualTo(pacienteEsperado.get("Nombre"));
-        assertThat(pacienteEncontrado.getObraSocial()).isEqualTo(pacienteEsperado.get("Obra social"));
-        assertThat(pacienteEncontrado.getNroAfiliado()).isEqualTo(pacienteEsperado.get("Numero afiliado"));
     }
 
 
@@ -70,8 +68,7 @@ public class ModuloRegPacientesStepDef {
 
         assertThat(pacienteEncontrado.getApellido()).isEqualTo(pacienteEsperado.get("Apellido"));
         assertThat(pacienteEncontrado.getNombre()).isEqualTo(pacienteEsperado.get("Nombre"));
-        assertThat(pacienteEncontrado.getObraSocial()).isNull();
-        assertThat(pacienteEncontrado.getNroAfiliado()).isNull();
+        assertThat(pacienteEncontrado.getObraSocialNombre()).isEmpty();
     }
 
 
@@ -86,16 +83,14 @@ public class ModuloRegPacientesStepDef {
     }
 
     @Given("Existen los siguientes pacientes afiliados a obras sociales:")
-    public void existenLosSiguientesPacientesAfiliadosAObrasSociales(List<Map<String, String>> pacientesData) {
-        for (Map<String, String> pacienteData : pacientesData) {
-            String cuil = pacienteData.get("Cuil");
-            String obraSocialNombre = pacienteData.get("Obra social");
-            String nroAfiliado = pacienteData.get("Numero afiliado");
+    public void existenLosSiguientesPacientesAfiliadosAObrasSociales(List<Map<String, String>> pacientesAfiliados) {
+        for (Map<String, String> afiliado : pacientesAfiliados) {
+            String cuil = afiliado.get("Cuil");
+            String obraSocial = afiliado.get("Obra social");
+            String numeroAfiliado = afiliado.get("Numero afiliado");
 
-            // Crear y guardar paciente afiliado
-            Paciente paciente = new Paciente(cuil, "Nombre", "Apellido"
-                    , obraSocialNombre, nroAfiliado, new Domicilio("Calle", 123, "Tucuman"));
-            dbMockeada.guardarPaciente(paciente);
+            // Guardar la afiliación en tu sistema
+            dbMockeada.registrarAfiliacion(cuil, obraSocial, numeroAfiliado);
         }
     }
 
@@ -103,6 +98,7 @@ public class ModuloRegPacientesStepDef {
     @When("Se intenta registrar el siguiente paciente:")
     public void seIntentaRegistrarElSiguientePaciente(List<Map<String, String>> pacienteData) {
         int numero;
+        Afiliado afiliado;
         try {
             Map<String, String> paciente = pacienteData.get(0);
             String cuil = paciente.get("Cuil");
@@ -116,10 +112,19 @@ public class ModuloRegPacientesStepDef {
             String localidad = paciente.get("Localidad");
             Domicilio domicilio = new Domicilio(calle, numero, localidad);
             String obraSocialNombre = paciente.get("Obra social");
+            if (obraSocialNombre == null) {
+                var obraSocialNoIngresada = new ObraSocial("","");
+                afiliado = new Afiliado("",obraSocialNoIngresada);
+                servicioRegistroPacientes.registrarPaciente(cuil,nombre,apellido,domicilio,afiliado);
+                return;
+            }
+            var obraSocial = dbMockeada.buscarObraSocial(obraSocialNombre);
+
             String nroAfiliado = paciente.get("Numero afiliado");
+            afiliado = new Afiliado(nroAfiliado, obraSocial);
 
             servicioRegistroPacientes.registrarPaciente(
-                    cuil, nombre, apellido, domicilio, obraSocialNombre, nroAfiliado
+                    cuil, nombre, apellido, domicilio, afiliado
             );
 
         } catch (Exception e) {

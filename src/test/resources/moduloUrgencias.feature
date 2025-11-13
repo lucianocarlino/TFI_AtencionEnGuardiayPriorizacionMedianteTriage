@@ -6,7 +6,12 @@ Feature: Modulo de urgencias
     Given Que la siguiente enfermera esta registrada:
       | Cuil         | Nombre | Apellido | E-mail           | Matricula
       | 23-9876543-6 | Susana | Gimenez  | susana@gmail.com | 12345
-
+    And Las siguientes obras sociales están registradas:
+      | Nombre            | Identificador |
+      | Subsidio de salud | SS            |
+      | Swiss medical     | SM            |
+      | FBSA              | FB            |
+      | OSDE              | OS            |
 
   Scenario: Ingreso del primer paciente a la lista de espera de urgencias
     Given que estan registrados los siguientes pacientes en el sistema:

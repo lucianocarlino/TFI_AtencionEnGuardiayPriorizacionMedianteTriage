@@ -19,7 +19,10 @@ class PacienteTest {
         String cuil = "20-12345678-9";
         String nombre = "Juan";
         String apellido = "Perez";
-        String obraSocial = "OSDE";
+        ObraSocial obraSocial = new ObraSocial("OSDE","OS");
+
+
+
         // Ejecucion
         Paciente paciente = new Paciente(cuil, nombre, apellido, obraSocial);
         // Verificacion
@@ -35,7 +38,7 @@ class PacienteTest {
         String cuil = "20-12345678-9";
         String nombre = null;
         String apellido = "Perez";
-        String obraSocial = "OSDE";
+        ObraSocial obraSocial = new ObraSocial("OSDE","OS");
         // Ejecucion y Verificacion
         Paciente paciente = new Paciente(cuil, nombre, apellido, obraSocial);
         assertNull(paciente.getNombre());
@@ -49,7 +52,7 @@ class PacienteTest {
         String cuil = "20-12345678-9";
         String nombre = "   ";
         String apellido = "Perez";
-        String obraSocial = "OSDE";
+        ObraSocial obraSocial = new ObraSocial("OSDE","OS");
         // Ejecucion y Verificacion
         Paciente paciente = new Paciente(cuil, nombre, apellido, obraSocial);
         assertEquals(nombre, paciente.getNombre());

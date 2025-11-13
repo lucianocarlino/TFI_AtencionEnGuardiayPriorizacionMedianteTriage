@@ -4,27 +4,27 @@ public class Paciente {
     private String cuil;
     private String nombre;
     private String apellido;
-    private String obraSocial;
-    private String nroAfiliado;
+    private Afiliado afiliado;
     private Domicilio direccion;
 
 
-    public Paciente(String cuil, String nombre, String apellido, String obraSocial) {
+    public Paciente(String cuil, String nombre, String apellido, ObraSocial obraSocial) {
+
+        this.cuil = cuil;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.afiliado = new Afiliado();
+        this.afiliado.setObraSocial(obraSocial);
         validarCampos();
 
-        this.cuil = cuil;
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.obraSocial = obraSocial;
     }
 
-    public Paciente(String cuil, String nombre, String apellido, String obraSocial, String nroAfiliado, Domicilio direccion) {
+    public Paciente(String cuil, String nombre, String apellido, Afiliado afiliado, Domicilio direccion) {
 
         this.cuil = cuil;
         this.nombre = nombre;
         this.apellido = apellido;
-        this.obraSocial = obraSocial;
-        this.nroAfiliado = nroAfiliado;
+        this.afiliado = afiliado;
         this.direccion = direccion;
 
         validarCampos();
@@ -39,11 +39,7 @@ public class Paciente {
     public String getApellido() {
         return apellido;
     }
-    public String getObraSocial() {
-        return obraSocial;
-    }
-    public String getNroAfiliado() { return nroAfiliado; }
-    public Domicilio getDireccion() { return  direccion; }
+    public Afiliado getAfiliado() { return afiliado; }
 
     public void validarCampos(){
         if (this.cuil == null || cuil.length() == 0){
@@ -56,6 +52,10 @@ public class Paciente {
         if (apellido == null || apellido.length() == 0){
             throw new RuntimeException("Apellido es un campo obligatorio");
         }
+
+        if (direccion == null){
+            return;
+        }
         var calle = this.direccion.getCalle();
         if (calle == null){ throw new RuntimeException("Calle es un campo obligatorio"); }
         var numero = this.direccion.getNumero();
@@ -64,6 +64,14 @@ public class Paciente {
         if (localidad == null){ throw new RuntimeException("Localidad es un campo obligatorio"); }
 
 
+    }
+
+    public ObraSocial getObraSocial() {
+        return afiliado.getObraSocial();
+    }
+
+    public String getObraSocialNombre(){
+        return afiliado.getObraSocial().getNombre();
     }
 
 

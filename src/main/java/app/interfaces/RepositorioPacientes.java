@@ -12,4 +12,6 @@ public interface RepositorioPacientes {
     public boolean existeObraSocial(String obraSocialNombre);
 
     boolean estaAfiliado(String cuil, String obraSocialNombre);
+
+    boolean verificarNumeroAfiliado(String cuil, String obraSocialNombre, String nroAfiliado);
 }

@@ -7,10 +7,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import mock.DBPrueba;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -20,6 +17,8 @@ public class ModuloUrgStepDefinitions {
     private DBPrueba dbMockeada;
     private ServicioUrgencias servicioUrgencias;
     private Exception excepcionEsperada;
+    private ObraSocial obraSocial;
+    private List<ObraSocial> obraSocialesRegistradas = new ArrayList<ObraSocial>();
 
     public ModuloUrgStepDefinitions() {
         this.dbMockeada = new DBPrueba();
@@ -49,13 +48,27 @@ public class ModuloUrgStepDefinitions {
 
     }
 
+    @And("Las siguientes obras sociales están registradas:")
+    public void lasSiguientesObrasSocialesEstanRegistradasEnElSistema(List<Map<String, String>> tabla) {
+        for (Map<String, String> fila : tabla) {
+            String nombre = fila.get("Nombre");
+            String Identificador = fila.get("Identificador");
+            obraSocial = new ObraSocial(nombre, Identificador);
+            obraSocialesRegistradas.add(obraSocial);
+            dbMockeada.guardarObraSocial(obraSocial);
+        }
+
+
+    }
+
     @Given("que estan registrados los siguientes pacientes en el sistema:")
     public void dadoQueEstanRegistradosLosSiguientesPacientesEnElSistema(List<Map<String, String>> tabla) {
         for  (Map<String, String> fila : tabla) {
             String cuil  = fila.get("Cuil");
             String nombre = fila.get("Nombre");
             String apellido = fila.get("Apellido");
-            String obraSocial =  fila.get("Obra social");
+            String obraSocialNombre =  fila.get("Obra social");
+            var  obraSocial = dbMockeada.buscarObraSocial(obraSocialNombre);
 
             Paciente paciente = new  Paciente(cuil, nombre, apellido, obraSocial);
 
@@ -142,7 +155,10 @@ public class ModuloUrgStepDefinitions {
             String cuil  = fila.get("Cuil");
             String nombre = fila.get("Nombre");
             String apellido = fila.get("Apellido");
-            String obraSocial =  fila.get("Obra social");
+            String obraSocialNombre =  fila.get("Obra social");
+            var obraSocial = dbMockeada.buscarObraSocial(obraSocialNombre);
+
+
             Paciente paciente = new  Paciente(cuil, nombre, apellido, obraSocial);
             dbMockeada.guardarPaciente(paciente);
         }
@@ -150,13 +166,13 @@ public class ModuloUrgStepDefinitions {
 
     @And("la lista de pacientes registrados en el sistema es la siguiente:")
     public void laListaDePacientesRegistradosEnElSistemaEsLaSiguiente( List<Map <String, String>> lista) {
-        List<Map<String,String>> pacientesRegistrados = dbMockeada.obtenerTodosLosPacientes()
+        List<Map<String, String>> pacientesRegistrados = dbMockeada.obtenerTodosLosPacientes()
                 .stream()
                 .map(paciente -> Map.of(
                         "Cuil", paciente.getCuil(),
                         "Nombre", paciente.getNombre(),
                         "Apellido", paciente.getApellido(),
-                        "Obra social", paciente.getObraSocial()
+                        "Obra social",paciente.getObraSocialNombre()
                 ))
                 .toList();
 

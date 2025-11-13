@@ -11,8 +11,7 @@ public class ServicioRegistroPacientes {
     }
 
     public void registrarPaciente(String cuil, String nombre, String apellido,
-                                  Domicilio domicilio, String obraSocialNombre,
-                                  String nroAfiliado) {
+                                  Domicilio domicilio, Afiliado afiliado) {
         // Validaciones de campos mandatorios
         if (cuil == null || cuil.trim().isEmpty()) {
             throw new IllegalArgumentException("CUIL es un campo obligatorio");
@@ -23,20 +22,39 @@ public class ServicioRegistroPacientes {
         if (nombre == null || nombre.trim().isEmpty()) {
             throw new IllegalArgumentException("Nombre es un campo obligatorio");
         }
-        // ... validar otros campos mandatorios
-
         // Validar obra social si se proporciona
-        if (obraSocialNombre != null && !obraSocialNombre.trim().isEmpty()) {
-            if (!dbPacientes.existeObraSocial(obraSocialNombre)) {
-                throw new IllegalArgumentException("No se puede registrar al paciente con una obra social inexistente");
+        if (afiliado != null) {
+            var obraSocial = afiliado.getObraSocial();
+            if (obraSocial == null) { throw new IllegalArgumentException("No se puede registrar al paciente con una obra social inexistente"); }
+            ;
+            var obraSocialNombre = obraSocial.getNombre();
+            if (obraSocialNombre.trim().isEmpty()) {
+                Paciente paciente = new Paciente(cuil, nombre, apellido, afiliado, domicilio);
+                dbPacientes.guardarPaciente(paciente);
             }
+            if (obraSocialNombre != null && !obraSocialNombre.trim().isEmpty()) {
+                if (!dbPacientes.existeObraSocial(obraSocialNombre)) {
+                    throw new IllegalArgumentException("No se puede registrar al paciente con una obra social inexistente");
+                }
+                if (!dbPacientes.estaAfiliado(cuil, obraSocialNombre)) {
+                    throw new IllegalArgumentException("No se puede registrar el paciente dado que no esta afiliado a la obra social");
+                }
+            }
+            // 2. Verificar que el paciente está afiliado a esa obra social
             if (!dbPacientes.estaAfiliado(cuil, obraSocialNombre)) {
                 throw new IllegalArgumentException("No se puede registrar el paciente dado que no esta afiliado a la obra social");
             }
+
+            // 3. Verificar que el número de afiliado coincide
+            if (!dbPacientes.verificarNumeroAfiliado(cuil, obraSocialNombre, afiliado.getNumAfiliado())) {
+                throw new IllegalArgumentException("Número de afiliado no válido");
+            }
         }
 
+
+
         // Crear y guardar paciente
-        Paciente paciente = new Paciente(cuil, nombre, apellido, obraSocialNombre, nroAfiliado, domicilio);
+        Paciente paciente = new Paciente(cuil, nombre, apellido, afiliado, domicilio);
         dbPacientes.guardarPaciente(paciente);
     }
 }
