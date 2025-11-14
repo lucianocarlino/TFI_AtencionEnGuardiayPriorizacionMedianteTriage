@@ -2,21 +2,27 @@ package mock;
 
 import app.interfaces.RepositorioObraSocial;
 import app.interfaces.RepositorioPacientes;
+import app.interfaces.RepositorioUsuarios;
 import domain.ObraSocial;
 import domain.Paciente;
+import domain.Usuario;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class DBPrueba implements RepositorioPacientes, RepositorioObraSocial {
+public class DBPrueba implements RepositorioPacientes, RepositorioObraSocial, RepositorioUsuarios {
     private List<Paciente> pacientes;
     private Map<String, ObraSocial> obrasociales;
     private Map<String,String> afiliaciones = new HashMap<>();
+    private List<Usuario> usuarios;
+    private Usuario usuarioActual;
 
     public DBPrueba() {
 
         this.pacientes = new ArrayList<>();
         this.obrasociales = new LinkedHashMap<>();
+        this.usuarios = new ArrayList<>();
+        this.usuarioActual = null;
     }
 
     @Override
@@ -73,4 +79,24 @@ public class DBPrueba implements RepositorioPacientes, RepositorioObraSocial {
         return numeroAfiliado.equals(numeroGuardado);
     }
 
+    @Override
+    public void guardarUsuario(Usuario usuario) {
+        this.usuarios.add(usuario);
+    }
+
+    @Override
+    public Optional<Usuario> buscarUsuario(String email) {
+        return Optional.ofNullable(usuarios.stream()
+                .filter(usuario -> usuario.getEmail().equals(email))
+                .findFirst()
+                .orElse(null));
+    }
+
+    public Optional<Usuario> getUsuarioActual() {
+        return Optional.ofNullable(usuarioActual);
+    }
+
+    public void setUsuarioActual(Usuario usuarioActual) {
+        this.usuarioActual = usuarioActual;
+    }
 }
