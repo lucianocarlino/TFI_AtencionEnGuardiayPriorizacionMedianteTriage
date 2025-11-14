@@ -9,4 +9,6 @@ public enum Autoridad {
         this.nombre = nombre;
     }
     public String getNombre(){ return nombre; }
+
+    public boolean tieneNombre(String nombre) {return this.nombre.equals(nombre); }
 }

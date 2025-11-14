@@ -4,7 +4,7 @@ Feature: Autenticacion
   Para poder acceder a las actividades que me son otorgadas
 
   Background:
-    Given La lista de usuarios es:
+    Given Existen los siguientes usuarios:
       | Email             | Contrasena | Autoridad |
       | luciano@gmail.com | luciano123 | Medico    |
     And Que el usuario actual es:
@@ -17,19 +17,19 @@ Feature: Autenticacion
       | luciano@gmail.com | luciano123 |
     Then El usuario actual es:
       | Email             | Contrasena | Autoridad |
-      | luciano@gmail.com | luciano123 | Medico
+      | luciano@gmail.com | luciano123 | Medico    |
 
   Scenario: Inicio de sesion fallido por usuario incorrecto
     When Intenta iniciar sesion el siguiente usuario:
       | Email            | Contrasena |
       | lucianogmail.com | luciano123 |
-    Then El sistema muestra el mensaje de error "Usuario o contrasena invalidos"
+    Then El sistema muestra el mensaje de error "Usuario o contrasena invalido"
 
   Scenario: Inicio de sesion fallido por contrasena incorrecta
     When Intenta iniciar sesion el siguiente usuario:
       | Email             | Contrasena |
       | luciano@gmail.com | luciano12  |
-    Then El sistema muestra el mensaje de error "Usuario o contrasena invalidos"
+    Then El sistema muestra el mensaje de error "Usuario o contrasena invalido"
 
   Scenario: Registro fallido de un usuario con email invalido
     When Intenta crearse el siguiente usuario:
@@ -65,5 +65,4 @@ Feature: Autenticacion
     Then La lista de usuarios es:
       | Email             | Contrasena | Autoridad |
       | luciano@gmail.com | luciano123 | Medico    |
-      | liomessi@10.com   | 12345678   | Enfermero |
       | franco@43.com     | alpine43   |           |

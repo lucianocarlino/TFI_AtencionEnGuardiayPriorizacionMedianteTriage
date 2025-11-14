@@ -92,9 +92,11 @@ public class DBPrueba implements RepositorioPacientes, RepositorioObraSocial, Re
                 .orElse(null));
     }
 
-    public Optional<Usuario> getUsuarioActual() {
+    @Override
+    public Optional<Usuario> getUsuarioActual(String email, String contrasena) {
         return Optional.ofNullable(usuarioActual);
     }
+
 
     public void setUsuarioActual(Usuario usuarioActual) {
         this.usuarioActual = usuarioActual;
