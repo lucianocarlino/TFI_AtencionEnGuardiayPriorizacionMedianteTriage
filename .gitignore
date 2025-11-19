@@ -36,3 +36,10 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+## Node ##
+node_modules/
+.next/
+.env
+.env.local
+*.log
