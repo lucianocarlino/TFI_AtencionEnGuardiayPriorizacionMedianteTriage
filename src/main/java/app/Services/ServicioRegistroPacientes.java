@@ -1,7 +1,10 @@
-package app;
+package app.Services;
 
+import app.domain.Afiliado;
+import app.domain.Domicilio;
+import app.domain.Paciente;
 import app.interfaces.RepositorioPacientes;
-import domain.*;
+import app.domain.*;
 
 public class ServicioRegistroPacientes {
     private RepositorioPacientes dbPacientes;

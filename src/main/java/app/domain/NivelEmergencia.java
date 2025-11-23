@@ -1,4 +1,4 @@
-package domain;
+package app.domain;
 
 public enum NivelEmergencia {
     CRITICA("Critica",0),

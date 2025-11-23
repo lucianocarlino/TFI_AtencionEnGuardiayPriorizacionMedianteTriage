@@ -1,4 +1,4 @@
-package domain;
+package app.domain;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

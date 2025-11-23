@@ -3,12 +3,11 @@ package mock;
 import app.interfaces.RepositorioObraSocial;
 import app.interfaces.RepositorioPacientes;
 import app.interfaces.RepositorioUsuarios;
-import domain.ObraSocial;
-import domain.Paciente;
-import domain.Usuario;
+import app.domain.ObraSocial;
+import app.domain.Paciente;
+import app.domain.Usuario;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class DBPrueba implements RepositorioPacientes, RepositorioObraSocial, RepositorioUsuarios {
     private List<Paciente> pacientes;

@@ -2,12 +2,15 @@ package app;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import app.Services.ServicioRegistroPacientes;
+import app.domain.Afiliado;
+import app.domain.Domicilio;
+import app.domain.ObraSocial;
+import app.domain.Paciente;
 import org.junit.jupiter.api.Test;
-import domain.*;
 import mock.DBPrueba;
 import org.junit.jupiter.api.*;
 import static org.mockito.Mockito.*;
-import java.util.Optional;
 import  static  org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 

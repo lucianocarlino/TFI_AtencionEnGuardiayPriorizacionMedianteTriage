@@ -1,6 +1,9 @@
 
-import app.ServicioUrgencias;
-import domain.*;
+import app.Services.ServicioUrgencias;
+import app.domain.Enfermera;
+import app.domain.NivelEmergencia;
+import app.domain.ObraSocial;
+import app.domain.Paciente;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;

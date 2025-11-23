@@ -1,7 +1,6 @@
-import app.ServicioAutenticacion;
-import domain.Autoridad;
-import domain.NivelEmergencia;
-import domain.Usuario;
+import app.Services.ServicioAutenticacion;
+import app.domain.Autoridad;
+import app.domain.Usuario;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;

@@ -1,14 +1,16 @@
-package app;
+package app.Services;
 
 import app.interfaces.RepositorioPacientes;
-import domain.Enfermera;
-import domain.Ingreso;
-import domain.NivelEmergencia;
-import domain.Paciente;
+import app.domain.Enfermera;
+import app.domain.Ingreso;
+import app.domain.NivelEmergencia;
+import app.domain.Paciente;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class ServicioUrgencias {
     private RepositorioPacientes dbPacientes;
     private final List<Ingreso> listaEspera;
@@ -45,6 +47,6 @@ public class ServicioUrgencias {
     }
 
     public List<Ingreso> obtenerIngresosPendientes() {
-        return this.listaEspera;
+        return List.copyOf(this.listaEspera);
     }
 }

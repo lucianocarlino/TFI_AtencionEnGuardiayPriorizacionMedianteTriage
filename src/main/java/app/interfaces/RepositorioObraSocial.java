@@ -1,8 +1,6 @@
 package app.interfaces;
 
-import domain.ObraSocial;
-
-import java.util.Optional;
+import app.domain.ObraSocial;
 
 public interface RepositorioObraSocial {
     public void guardarObraSocial(ObraSocial obraSocial);

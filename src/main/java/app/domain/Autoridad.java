@@ -1,4 +1,4 @@
-package domain;
+package app.domain;
 
 public enum Autoridad {
     MEDICO("Medico"),

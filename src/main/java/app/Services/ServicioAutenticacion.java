@@ -1,8 +1,8 @@
-package app;
+package app.Services;
 
 import app.interfaces.RepositorioUsuarios;
-import domain.Autoridad;
-import domain.Usuario;
+import app.domain.Autoridad;
+import app.domain.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;

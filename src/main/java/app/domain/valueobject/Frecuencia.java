@@ -1,4 +1,4 @@
-package domain.valueobject;
+package app.domain.valueobject;
 
 public  abstract class Frecuencia {
     protected Float value;

@@ -1,6 +1,6 @@
 package app.interfaces;
 
-import domain.Usuario;
+import app.domain.Usuario;
 
 import java.util.Optional;
 

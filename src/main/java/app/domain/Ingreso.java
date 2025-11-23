@@ -1,6 +1,9 @@
-package domain;
+package app.domain;
 
-import domain.valueobject.*;
+import app.domain.valueobject.FrecuenciaCardiaca;
+import app.domain.valueobject.FrecuenciaRespiratoria;
+import app.domain.valueobject.TensionArterial;
+import app.domain.valueobject.*;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;

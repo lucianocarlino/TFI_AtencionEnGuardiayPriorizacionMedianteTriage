@@ -1,4 +1,4 @@
-package domain.valueobject;
+package app.domain.valueobject;
 
 public class FrecuenciaDiastolica extends Frecuencia{
     public FrecuenciaDiastolica(Float value) {

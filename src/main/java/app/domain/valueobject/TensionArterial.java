@@ -1,4 +1,4 @@
-package domain.valueobject;
+package app.domain.valueobject;
 
 public class TensionArterial {
     private FrecuenciaDiastolica frecuenciaDiastolica;
