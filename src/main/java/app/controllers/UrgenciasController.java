@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/urgencias")
+@CrossOrigin(origins = "http://localhost:3000")
 public class UrgenciasController {
     @Autowired
     ServicioUrgencias servicioUrgencias;
@@ -34,7 +35,7 @@ public class UrgenciasController {
                     ingresoDTO.getFrecuenciaSistolica(),
                     ingresoDTO.getFrecuenciaDiastolica()
             );
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok().body("Ingreso a urgencias registrado correctamente");
         }
         catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

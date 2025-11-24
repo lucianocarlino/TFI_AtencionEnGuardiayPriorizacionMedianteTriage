@@ -1,18 +1,20 @@
 'use client'
 
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
+import {useState} from 'react'
+import {Button} from '@/components/ui/button'
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card'
+import {Input} from '@/components/ui/input'
+import {NivelEmergencia} from "@/lib/types";
+import {registrarIngreso} from "@/lib/api";
 
-type NivelEmergencia = 'CRITICO' | 'URGENTE' | 'SEMI_URGENTE' | 'NO_URGENTE'
+
 
 export default function UrgenciaForm() {
   const [formData, setFormData] = useState({
     cuilPaciente: '',
     nombreEnfermera: '',
     informe: '',
-    nivelEmergencia: 'SEMI_URGENTE' as NivelEmergencia,
+    nivelEmergencia: NivelEmergencia.SIN_URGENCIA,
     temperatura: '',
     frecCardiaca: '',
     frecRespiratoria: '',
@@ -58,20 +60,34 @@ export default function UrgenciaForm() {
 
     setLoading(true)
     try {
-      console.log('Urgencia registrada:', formData)
+        const ingresoDTO = {
+            cuilPaciente: formData.cuilPaciente,
+            informe: formData.informe,
+            nivelEmergencia: formData.nivelEmergencia,
+            temperatura: parseFloat(formData.temperatura),
+            frecCardiaca: parseFloat(formData.frecCardiaca),
+            frecRespiratoria: parseFloat(formData.frecRespiratoria),
+            frecuenciaSistolica: parseFloat(formData.frecuenciaSistolica),
+            frecuenciaDiastolica: parseFloat(formData.frecuenciaDiastolica),
+            // AJUSTE ENFERMERA: Tu DTO espera un objeto o null.
+            // Por ahora mandamos null o un objeto mock. Lo ideal es tener la enfermera logueada real.
+            enfermera: null
+        }
+        const mensajeBackend = await registrarIngreso(ingresoDTO)
+      console.log( mensajeBackend)
       setSuccess(true)
       setFormData({
         cuilPaciente: '',
         nombreEnfermera: '',
         informe: '',
-        nivelEmergencia: 'SEMI_URGENTE',
+        nivelEmergencia: NivelEmergencia.SIN_URGENCIA,
         temperatura: '',
         frecCardiaca: '',
         frecRespiratoria: '',
         frecuenciaSistolica: '',
         frecuenciaDiastolica: ''
       })
-      setTimeout(() => setSuccess(false), 5000)
+      setTimeout(() => setSuccess(false), 5000) //para que sirve?
     } catch (error) {
       console.error('Error:', error)
     } finally {
@@ -81,10 +97,11 @@ export default function UrgenciaForm() {
 
   const getNivelColor = (nivel: NivelEmergencia) => {
     switch (nivel) {
-      case 'CRITICO': return 'bg-destructive/10 border-destructive/20 text-destructive'
-      case 'URGENTE': return 'bg-accent/10 border-accent/20 text-accent'
-      case 'SEMI_URGENTE': return 'bg-warning/10 border-warning/20 text-warning'
-      case 'NO_URGENTE': return 'bg-primary/10 border-primary/20 text-primary'
+      case NivelEmergencia.CRITICA: return 'bg-destructive/10 border-destructive/20 text-destructive'
+      case NivelEmergencia.EMERGENCIA: return 'bg-accent/10 border-accent/20 text-accent'
+      case NivelEmergencia.URGENCIA: return 'bg-warning/10 border-warning/20 text-warning'
+      case NivelEmergencia.URGENCIA_MENOR: return 'bg-primary/10 border-primary/20 text-primary'
+      case NivelEmergencia.SIN_URGENCIA: return 'bg-primary/10 border-primary/20 text-primary' //CambiarCOLOR
       default: return ''
     }
   }
@@ -112,7 +129,7 @@ export default function UrgenciaForm() {
                   name="cuilPaciente"
                   value={formData.cuilPaciente}
                   onChange={handleChange}
-                  placeholder="20123456789"
+                  placeholder=""
                   className={errors.cuilPaciente ? 'border-destructive' : ''}
                 />
                 {errors.cuilPaciente && <p className="text-destructive text-sm mt-1">{errors.cuilPaciente}</p>}
@@ -125,7 +142,7 @@ export default function UrgenciaForm() {
                   name="nombreEnfermera"
                   value={formData.nombreEnfermera}
                   onChange={handleChange}
-                  placeholder="María González"
+                  placeholder=""
                   className={errors.nombreEnfermera ? 'border-destructive' : ''}
                 />
                 {errors.nombreEnfermera && <p className="text-destructive text-sm mt-1">{errors.nombreEnfermera}</p>}
@@ -141,10 +158,12 @@ export default function UrgenciaForm() {
                   onChange={handleChange}
                   className="w-full bg-transparent font-semibold outline-none"
                 >
-                  <option value="NO_URGENTE">NO URGENTE - Consulta ambulatoria</option>
-                  <option value="SEMI_URGENTE">SEMI-URGENTE - Requiere atención en pocas horas</option>
-                  <option value="URGENTE">URGENTE - Requiere atención inmediata</option>
-                  <option value="CRITICO">CRÍTICO - Riesgo de vida inmediato</option>
+                  <option value="SIN_URGENCIA">SIN URGENCIA- Consulta ambulatoria</option>
+                  <option value="URGENCIA_MENOR">URGENCIA MENOR- </option>
+                  <option value="URGENCIA">URGENCIA - </option>
+                  <option value="EMERGENCIA">EMERGENCIA - </option>
+                  <option value="CRITICA">CRITICA- Riesgo de vida inmediato</option>
+
                 </select>
               </div>
             </div>
@@ -172,7 +191,7 @@ export default function UrgenciaForm() {
                     name="temperatura"
                     value={formData.temperatura}
                     onChange={handleChange}
-                    placeholder="37.5"
+                    placeholder=""
                     step="0.1"
                     className={errors.temperatura ? 'border-destructive' : ''}
                   />
@@ -186,7 +205,7 @@ export default function UrgenciaForm() {
                     name="frecCardiaca"
                     value={formData.frecCardiaca}
                     onChange={handleChange}
-                    placeholder="72"
+                    placeholder=""
                     className={errors.frecCardiaca ? 'border-destructive' : ''}
                   />
                   {errors.frecCardiaca && <p className="text-destructive text-sm mt-1">{errors.frecCardiaca}</p>}
@@ -199,7 +218,7 @@ export default function UrgenciaForm() {
                     name="frecRespiratoria"
                     value={formData.frecRespiratoria}
                     onChange={handleChange}
-                    placeholder="16"
+                    placeholder=""
                     className={errors.frecRespiratoria ? 'border-destructive' : ''}
                   />
                   {errors.frecRespiratoria && <p className="text-destructive text-sm mt-1">{errors.frecRespiratoria}</p>}
@@ -212,7 +231,7 @@ export default function UrgenciaForm() {
                     name="frecuenciaSistolica"
                     value={formData.frecuenciaSistolica}
                     onChange={handleChange}
-                    placeholder="120"
+                    placeholder=""
                     className={errors.frecuenciaSistolica ? 'border-destructive' : ''}
                   />
                   {errors.frecuenciaSistolica && <p className="text-destructive text-sm mt-1">{errors.frecuenciaSistolica}</p>}
@@ -225,7 +244,7 @@ export default function UrgenciaForm() {
                     name="frecuenciaDiastolica"
                     value={formData.frecuenciaDiastolica}
                     onChange={handleChange}
-                    placeholder="80"
+                    placeholder=""
                     className={errors.frecuenciaDiastolica ? 'border-destructive' : ''}
                   />
                   {errors.frecuenciaDiastolica && <p className="text-destructive text-sm mt-1">{errors.frecuenciaDiastolica}</p>}
