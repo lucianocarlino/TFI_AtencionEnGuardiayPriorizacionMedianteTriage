@@ -54,6 +54,7 @@ public class Ingreso implements Comparable<Ingreso>{
 
     public EstadoIngreso getEstado(){ return this.estado; }
 
+    public NivelEmergencia getNivelEmergencia(){ return this.nivelEmergencia; }
     public int ObtenerPesoNivel(){
         List<NivelEmergencia> niveles = Arrays.stream(NivelEmergencia.values()).toList();
         int prioridad = niveles.indexOf(this.nivelEmergencia);

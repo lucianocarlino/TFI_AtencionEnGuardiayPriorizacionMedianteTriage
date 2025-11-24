@@ -2,11 +2,10 @@ package app.controllers;
 
 import app.Services.ServicioUrgencias;
 import app.domain.Ingreso;
+import app.dtos.IngresoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,5 +18,26 @@ public class UrgenciasController {
     public ResponseEntity<?> listarUrgencias() {
         List<Ingreso> ingresosPendientes = servicioUrgencias.obtenerIngresosPendientes();
         return ResponseEntity.ok(ingresosPendientes);
+    }
+
+    @PostMapping
+    public ResponseEntity<?> guardarIngreso(@RequestBody IngresoDTO ingresoDTO ) {
+        try {
+            servicioUrgencias.registrarUrgencias(
+                    ingresoDTO.getCuilPaciente(),
+                    ingresoDTO.getEnfermera(),
+                    ingresoDTO.getInforme(),
+                    ingresoDTO.getNivelEmergencia(),
+                    ingresoDTO.getTemperatura(),
+                    ingresoDTO.getFrecCardiaca(),
+                    ingresoDTO.getFrecRespiratoria(),
+                    ingresoDTO.getFrecuenciaSistolica(),
+                    ingresoDTO.getFrecuenciaDiastolica()
+            );
+            return ResponseEntity.ok().build();
+        }
+        catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

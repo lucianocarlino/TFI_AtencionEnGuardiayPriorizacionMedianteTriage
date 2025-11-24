@@ -8,7 +8,7 @@ import app.domain.Domicilio;
 import app.domain.ObraSocial;
 import app.domain.Paciente;
 import org.junit.jupiter.api.Test;
-import mock.DBPrueba;
+import app.mock.DBPrueba;
 import org.junit.jupiter.api.*;
 import static org.mockito.Mockito.*;
 import  static  org.assertj.core.api.Assertions.*;
