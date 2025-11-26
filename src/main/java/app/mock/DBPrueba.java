@@ -39,14 +39,27 @@ public class DBPrueba implements RepositorioPacientes, RepositorioObraSocial, Re
         // public Paciente(String cuil, String nombre, String apellido, ObraSocial obraSocial)
         try {
             Paciente p1 = new Paciente(
-                    "20-12345678-0",
+                    "20-12345678-9",
+                    "Juan",
+                    "Perez",
+                    osde
+            );
+
+            Paciente p2 = new Paciente(
+                    "20-98765432-1",
+                    "Ana",
+                    "Martinez",
+                    pami
+            );
+            Paciente p3 = new Paciente(
+                    "30-12345678-9",
                     "Lionel",
                     "Messi",
                     osde
             );
 
-            Paciente p2 = new Paciente(
-                    "27-98765432-1",
+            Paciente p4 = new Paciente(
+                    "30-98765432-1",
                     "Maria",
                     "Becerra",
                     pami
@@ -55,6 +68,9 @@ public class DBPrueba implements RepositorioPacientes, RepositorioObraSocial, Re
             // 3. Los agrego a la lista
             this.pacientes.add(p1);
             this.pacientes.add(p2);
+            this.pacientes.add(p3);
+            this.pacientes.add(p4);
+
 
 
         } catch (Exception e) {

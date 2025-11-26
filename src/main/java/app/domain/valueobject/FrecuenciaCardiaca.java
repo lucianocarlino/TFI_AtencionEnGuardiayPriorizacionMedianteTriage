@@ -5,6 +5,8 @@ public class FrecuenciaCardiaca extends Frecuencia {
         super(value);
     }
 
+    public float getValue(){return value;}
+
     @Override
     protected RuntimeException notificarError() {
         return new RuntimeException("Frecuencia cardiaca no puede ser negativa");

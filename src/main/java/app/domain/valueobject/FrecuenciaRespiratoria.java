@@ -6,6 +6,8 @@ public class FrecuenciaRespiratoria extends Frecuencia {
         super(value);
     }
 
+    public float getValue(){return value;}
+
     @Override
     protected RuntimeException notificarError() {
         return new IllegalArgumentException("Frecuencia respiratoria no puede ser negativa");

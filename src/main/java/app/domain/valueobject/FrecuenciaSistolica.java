@@ -5,6 +5,9 @@ public class FrecuenciaSistolica extends Frecuencia{
         super(value);
     }
 
+
+    public float getValue(){return value;}
+
     @Override
     protected RuntimeException notificarError() {
         return new IllegalArgumentException("Frecuencia sistolica no puede ser negativa");

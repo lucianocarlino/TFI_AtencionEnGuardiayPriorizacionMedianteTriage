@@ -51,8 +51,37 @@ public class Ingreso implements Comparable<Ingreso>{
         return this.paciente.getCuil();
     }
 
+    public Paciente getPaciente(){return this.paciente;}
 
     public EstadoIngreso getEstado(){ return this.estado; }
+
+    public Enfermera getEnfermera() {
+        return this.enfermera;
+    }
+
+    public LocalDateTime getFechaIngreso() {
+        return fechaIngreso;
+    }
+
+    public String getInforme() {
+        return informe;
+    }
+
+    public Float getTemperatura() {
+        return temperatura;
+    }
+
+    public FrecuenciaCardiaca getFrecuenciaCardiaca() {
+        return frecuenciaCardiaca;
+    }
+
+    public FrecuenciaRespiratoria getFrecuenciaRespiratoria() {
+        return frecuenciaRespiratoria;
+    }
+
+    public TensionArterial getTensionArterial() {
+        return tensionArterial;
+    }
 
     public NivelEmergencia getNivelEmergencia(){ return this.nivelEmergencia; }
     public int ObtenerPesoNivel(){

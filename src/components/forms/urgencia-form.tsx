@@ -12,7 +12,7 @@ import {registrarIngreso} from "@/lib/api";
 export default function UrgenciaForm() {
   const [formData, setFormData] = useState({
     cuilPaciente: '',
-    nombreEnfermera: '',
+    nombreEnfermera: 'Jorgelina Ponce',
     informe: '',
     nivelEmergencia: NivelEmergencia.SIN_URGENCIA,
     temperatura: '',
@@ -71,14 +71,14 @@ export default function UrgenciaForm() {
             frecuenciaDiastolica: parseFloat(formData.frecuenciaDiastolica),
             // AJUSTE ENFERMERA: Tu DTO espera un objeto o null.
             // Por ahora mandamos null o un objeto mock. Lo ideal es tener la enfermera logueada real.
-            enfermera: null
+            enfermera: {cuil: 1, nombre:"Jorgelina Ponce"}
         }
         const mensajeBackend = await registrarIngreso(ingresoDTO)
       console.log( mensajeBackend)
       setSuccess(true)
       setFormData({
         cuilPaciente: '',
-        nombreEnfermera: '',
+        nombreEnfermera: 'Jorgelina Ponce',
         informe: '',
         nivelEmergencia: NivelEmergencia.SIN_URGENCIA,
         temperatura: '',
@@ -140,10 +140,10 @@ export default function UrgenciaForm() {
                 <Input
                   type="text"
                   name="nombreEnfermera"
-                  value={formData.nombreEnfermera}
                   onChange={handleChange}
-                  placeholder=""
+                  value={formData.nombreEnfermera}
                   className={errors.nombreEnfermera ? 'border-destructive' : ''}
+                  readOnly={true}
                 />
                 {errors.nombreEnfermera && <p className="text-destructive text-sm mt-1">{errors.nombreEnfermera}</p>}
               </div>

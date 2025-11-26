@@ -26,6 +26,9 @@ export default function Sidebar() {
           </div>
         </div>
       </div>
+        <div className="pt-2 pb-1">
+            <p className="px-4 text-xs font-semibold text-sidebar-foreground/60 uppercase tracking-wide">Enfermera: Jorgelina Ponce</p>
+        </div>
 
       <nav className="p-4 space-y-2">
         <Link href="/" className={cn(

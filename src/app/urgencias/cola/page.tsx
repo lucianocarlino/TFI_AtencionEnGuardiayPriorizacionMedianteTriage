@@ -3,71 +3,42 @@
 import { useState, useEffect } from 'react'
 import Sidebar from '@/components/sidebar'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import {NivelEmergencia, EstadoIngreso, IngresoResponse} from '@/lib/types'
+import { listarUrgencias} from "@/lib/api";
 
-interface Ingreso {
-  id: string
-  cuilPaciente: string
-  nombrePaciente: string
-  nombreEnfermera: string
-  nivelEmergencia: 'CRITICO' | 'URGENTE' | 'SEMI_URGENTE' | 'NO_URGENTE'
-  temperatura: number
-  frecCardiaca: number
-  frecRespiratoria: number
-  sistolica: number
-  diastolica: number
-  informe: string
-  fechaIngreso: string
-  estado: 'PENDIENTE' | 'EN_ATENCION' | 'RESUELTO'
-}
 
 export default function ColaUrgencias() {
-  const [ingresos, setIngresos] = useState<Ingreso[]>([])
+  const [ingresos, setIngresos] = useState<IngresoResponse[]>([])
   const [filtroNivel, setFiltroNivel] = useState<string>('todos')
 
-  useEffect(() => {
-    // Aquí iría la llamada al backend para obtener la lista de urgencias
-    // Por ahora, usamos datos de demostración
-    const datosDemo: Ingreso[] = [
-      {
-        id: '1',
-        cuilPaciente: '20123456789',
-        nombrePaciente: 'Juan Pérez',
-        nombreEnfermera: 'María González',
-        nivelEmergencia: 'CRITICO',
-        temperatura: 39.5,
-        frecCardiaca: 120,
-        frecRespiratoria: 24,
-        sistolica: 160,
-        diastolica: 100,
-        informe: 'Dolor torácico intenso con dificultad respiratoria',
-        fechaIngreso: new Date().toISOString(),
-        estado: 'PENDIENTE'
-      },
-      {
-        id: '2',
-        cuilPaciente: '20987654321',
-        nombrePaciente: 'Ana Martínez',
-        nombreEnfermera: 'Carlos López',
-        nivelEmergencia: 'URGENTE',
-        temperatura: 38.2,
-        frecCardiaca: 95,
-        frecRespiratoria: 18,
-        sistolica: 135,
-        diastolica: 85,
-        informe: 'Fractura de brazo con hemorragia moderada',
-        fechaIngreso: new Date(Date.now() - 600000).toISOString(),
-        estado: 'PENDIENTE'
-      }
-    ]
-    setIngresos(datosDemo)
-  }, [])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState("")
 
-  const getNivelInfo = (nivel: string) => {
-    const info: Record<string, { label: string; color: string; bg: string; borderColor: string }> = {
-      CRITICO: { label: 'CRÍTICO', color: 'text-destructive', bg: 'bg-destructive/10', borderColor: 'border-destructive/20' },
-      URGENTE: { label: 'URGENTE', color: 'text-accent', bg: 'bg-accent/10', borderColor: 'border-accent/20' },
-      SEMI_URGENTE: { label: 'SEMI-URGENTE', color: 'text-warning', bg: 'bg-warning/10', borderColor: 'border-warning/20' },
-      NO_URGENTE: { label: 'NO URGENTE', color: 'text-primary', bg: 'bg-primary/10', borderColor: 'border-primary/20' }
+    const cargarDatos = async () => {
+        setLoading(true)
+        try {
+            const data = await listarUrgencias();
+            setIngresos(data);
+            setError("");
+        } catch (err: any) {
+            setError("Error al cargar la lista de espera. Verifique que el servidor esté encendido.");
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    // Cargar datos al iniciar la página
+    useEffect(() => {
+        cargarDatos();
+    }, [])
+
+  const getNivelInfo = (nivel:NivelEmergencia) => {
+    const info: Record<NivelEmergencia, { label: string; color: string; bg: string; borderColor: string }> = {
+      CRITICA: { label: 'CRITICA', color: 'text-destructive', bg: 'bg-destructive/10', borderColor: 'border-destructive/20' },
+      EMERGENCIA: { label: 'EMERGENCIA', color: 'text-accent', bg: 'bg-accent/10', borderColor: 'border-accent/20' },
+      URGENCIA: { label: 'URGENCIA', color: 'text-warning', bg: 'bg-warning/10', borderColor: 'border-warning/20' },
+      URGENCIA_MENOR: { label: 'URGENCIA_MENOR', color: 'text-primary', bg: 'bg-primary/10', borderColor: 'border-primary/20' },
+      SIN_URGENCIA: { label: 'SIN_URGENCIA', color: 'text-primary', bg: 'bg-primary/10', borderColor: 'border-primary/20' }
     }
     return info[nivel]
   }
@@ -78,16 +49,16 @@ export default function ColaUrgencias() {
 
   // Ordena por nivel de emergencia (crítico primero)
   const nivelesOrden: Record<string, number> = {
-    CRITICO: 0,
-    URGENTE: 1,
-    SEMI_URGENTE: 2,
-    NO_URGENTE: 3
+    CRITICA: 0,
+    EMERGENCIA:1,
+    URGENCIA: 2,
+    URGENCIA_MENOR: 3,
+    SIN_URGENCIA: 4
   }
 
   const ingresosOrdenados = [...ingresosFiltrados].sort(
     (a, b) => nivelesOrden[a.nivelEmergencia] - nivelesOrden[b.nivelEmergencia]
   )
-
   return (
     <div className="flex min-h-screen bg-background">
       <Sidebar />
@@ -120,7 +91,7 @@ export default function ColaUrgencias() {
                   : 'bg-destructive/10 text-destructive hover:bg-destructive/20'
               }`}
             >
-              Crítico ({ingresos.filter(i => i.nivelEmergencia === 'CRITICO').length})
+              Crítico ({ingresos.filter(i => i.nivelEmergencia === 'CRITICA').length})
             </button>
             <button
               onClick={() => setFiltroNivel('URGENTE')}
@@ -130,22 +101,22 @@ export default function ColaUrgencias() {
                   : 'bg-accent/10 text-accent hover:bg-accent/20'
               }`}
             >
-              Urgente ({ingresos.filter(i => i.nivelEmergencia === 'URGENTE').length})
+              Emergencia ({ingresos.filter(i => i.nivelEmergencia === 'EMERGENCIA').length})
             </button>
           </div>
 
           <div className="space-y-4">
-            {ingresosOrdenados.length === 0 ? (
+            {ingresos.length === 0 ? (
               <Card>
                 <CardContent className="pt-8">
                   <p className="text-center text-muted-foreground">No hay ingresos registrados</p>
                 </CardContent>
               </Card>
             ) : (
-              ingresosOrdenados.map((ingreso, index) => {
+              ingresos.map((ingreso, index) => {
                 const nivelInfo = getNivelInfo(ingreso.nivelEmergencia)
                 return (
-                  <Card key={ingreso.id} className={`border-2 ${nivelInfo.borderColor}`}>
+                  <Card key={ingreso.paciente.cuil} className={`border-2 ${nivelInfo.borderColor}`}>
                     <CardContent className="pt-6">
                       <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
                         <div className="flex-1">
@@ -154,9 +125,10 @@ export default function ColaUrgencias() {
                               #{index + 1} - {nivelInfo.label}
                             </div>
                           </div>
-                          <h3 className="text-lg font-bold text-foreground">{ingreso.nombrePaciente}</h3>
-                          <p className="text-sm text-muted-foreground">CUIL: {ingreso.cuilPaciente}</p>
-                          <p className="text-sm text-muted-foreground mt-2">Enfermera: {ingreso.nombreEnfermera}</p>
+                          <h3 className="text-lg font-bold text-foreground">{`${ingreso.paciente.nombre} ${ingreso.paciente.apellido}`}</h3>
+                            <h3 className="text-lg text-foreground">Estado: {ingreso.estado}</h3>
+                          <p className="text-sm text-muted-foreground">CUIL: {ingreso.paciente.cuil}</p>
+                          <p className="text-sm text-muted-foreground mt-2">Enfermera: {ingreso.enfermera.nombre}</p>
                           <p className="text-sm text-foreground mt-3 leading-relaxed">{ingreso.informe}</p>
                         </div>
 
@@ -170,15 +142,15 @@ export default function ColaUrgencias() {
                               </div>
                               <div>
                                 <p className="text-muted-foreground">Frecuencia Cardíaca</p>
-                                <p className="font-bold text-foreground">{ingreso.frecCardiaca} lpm</p>
+                                <p className="font-bold text-foreground">{`${ingreso.frecuenciaCardiaca.value}`} lpm</p>
                               </div>
                               <div>
                                 <p className="text-muted-foreground">Frecuencia Respiratoria</p>
-                                <p className="font-bold text-foreground">{ingreso.frecRespiratoria} rpm</p>
+                                <p className="font-bold text-foreground">{`${ingreso.frecuenciaRespiratoria.value}`}  rpm</p>
                               </div>
                               <div>
                                 <p className="text-muted-foreground">Tensión Arterial</p>
-                                <p className="font-bold text-foreground">{ingreso.sistolica}/{ingreso.diastolica}</p>
+                                <p className="font-bold text-foreground">{`${ingreso.tensionArterial.frecuenciaSistolica}`}/{`${ingreso.tensionArterial.frecuenciaDiastolica}`}</p>
                               </div>
                             </div>
                           </div>

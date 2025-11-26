@@ -10,7 +10,16 @@ public class TensionArterial {
 
     }
 
+    public float getFrecuenciaDiastolica() {
+        return frecuenciaDiastolica.getValue();
+    }
+
+    public float getFrecuenciaSistolica() {
+        return frecuenciaSistolica.getValue();
+    }
+
     public String getValorFormateado() {
-        return String.format("%s / %s", this.frecuenciaSistolica, this.frecuenciaDiastolica );
+        //return String.format("%s / %s", this.frecuenciaSistolica, this.frecuenciaDiastolica );
+        return frecuenciaSistolica.getValue() + " / " + frecuenciaDiastolica.getValue();
     }
 }

@@ -15,4 +15,24 @@ public class Enfermera{
         this.email = email;
         this.matricula = matricula;
     }
+
+    public String getCuil() {
+        return cuil;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getMatricula() {
+        return matricula;
+    }
 }

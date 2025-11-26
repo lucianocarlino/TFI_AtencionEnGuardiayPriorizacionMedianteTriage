@@ -4,7 +4,7 @@ public class FrecuenciaDiastolica extends Frecuencia{
     public FrecuenciaDiastolica(Float value) {
         super(value);
     }
-
+    public float getValue(){return value;}
     @Override
     protected RuntimeException notificarError() {
         return new IllegalArgumentException("Frecuencia diastolica no puede ser negativa");
