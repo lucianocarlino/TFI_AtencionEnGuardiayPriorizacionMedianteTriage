@@ -4,6 +4,7 @@ import app.interfaces.RepositorioUsuarios;
 import app.domain.Autoridad;
 import app.domain.Usuario;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ public class ServicioAutenticacion {
     private Usuario usuarioActual;
     private final List<Usuario> usuarios;
 
+    @Autowired
     public ServicioAutenticacion(RepositorioUsuarios dbUsuarios) {
         this.dbUsuarios = dbUsuarios;
         this.usuarioActual = null;

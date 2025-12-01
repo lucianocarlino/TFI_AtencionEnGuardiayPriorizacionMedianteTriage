@@ -33,8 +33,8 @@ public class DBPrueba implements RepositorioPacientes, RepositorioObraSocial, Re
         ObraSocial pami = new ObraSocial("PAMI", "pm1");
 
         // Guardo las obras sociales en su mapa (si es necesario)
-        //this.obrasociales.put(osde.getIdentificador(), osde);
-        //this.obrasociales.put(pami.getIdentificador(), pami);
+        this.obrasociales.put(osde.getIdentificador(), osde);
+        this.obrasociales.put(pami.getIdentificador(), pami);
 
         // 2. Creo los Pacientes usando el constructor que mostraste primero
         // public Paciente(String cuil, String nombre, String apellido, ObraSocial obraSocial)
@@ -72,6 +72,7 @@ public class DBPrueba implements RepositorioPacientes, RepositorioObraSocial, Re
             this.pacientes.add(p3);
             this.pacientes.add(p4);
 
+            // Creating test users with different roles
             Usuario enfermero1 = new Usuario("enfermero@hospital.com", "password123", Autoridad.ENFERMERO);
             Usuario enfermero2 = new Usuario("maria.lopez@hospital.com", "enfermera123", Autoridad.ENFERMERO);
             Usuario medico1 = new Usuario("medico@hospital.com", "password123", Autoridad.MEDICO);
@@ -81,6 +82,11 @@ public class DBPrueba implements RepositorioPacientes, RepositorioObraSocial, Re
             this.usuarios.add(enfermero2);
             this.usuarios.add(medico1);
             this.usuarios.add(medico2);
+
+            this.registrarAfiliacion("20-12345678-9", "OSDE", "123456");
+            this.registrarAfiliacion("20-98765432-1", "PAMI", "789012");
+            this.registrarAfiliacion("30-12345678-9", "OSDE", "345678");
+            this.registrarAfiliacion("30-98765432-1", "PAMI", "901234");
 
         } catch (Exception e) {
             throw new RuntimeException( e.getMessage());

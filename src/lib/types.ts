@@ -44,6 +44,7 @@ export interface Paciente {
   afiliado: Afiliado // Objeto anidado
   direccion?: Domicilio // Puede ser null (según tu primer constructor)
 }
+
 export interface Enfermera {
   cuil: string
   nombre: string
@@ -69,6 +70,26 @@ export interface Domicilio {
   numero: number
   localidad: string
   // Agrega aquí lo que tenga tu clase Domicilio
+}
+
+export interface PacienteRegistroDTO {
+  cuil: string
+  nombre: string
+  apellido: string
+  calle?: string
+  numero?: string
+  localidad?: string
+  provincia?: string
+  obraSocial?: string
+  numAfiliado?: string
+}
+
+export interface PacienteResponse {
+  cuil: string
+  nombre: string
+  apellido: string
+  afiliado?: Afiliado
+  direccion?: Domicilio
 }
 
 // 3. La Interfaz Principal de Respuesta

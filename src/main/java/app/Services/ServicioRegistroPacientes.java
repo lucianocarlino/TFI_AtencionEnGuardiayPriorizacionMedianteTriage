@@ -5,10 +5,14 @@ import app.domain.Domicilio;
 import app.domain.Paciente;
 import app.interfaces.RepositorioPacientes;
 import app.domain.*;
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
+@Service
 public class ServicioRegistroPacientes {
     private RepositorioPacientes dbPacientes;
 
+    @Autowired
     public ServicioRegistroPacientes(RepositorioPacientes db) {
         this.dbPacientes = db;
     }
@@ -29,7 +33,6 @@ public class ServicioRegistroPacientes {
         if (afiliado != null) {
             var obraSocial = afiliado.getObraSocial();
             if (obraSocial == null) { throw new IllegalArgumentException("No se puede registrar al paciente con una obra social inexistente"); }
-            ;
             var obraSocialNombre = obraSocial.getNombre();
             if (obraSocialNombre.trim().isEmpty()) {
                 Paciente paciente = new Paciente(cuil, nombre, apellido, afiliado, domicilio);
@@ -54,8 +57,6 @@ public class ServicioRegistroPacientes {
                 throw new IllegalArgumentException("Número de afiliado no válido");
             }
         }
-
-
 
         // Crear y guardar paciente
         Paciente paciente = new Paciente(cuil, nombre, apellido, afiliado, domicilio);

@@ -1,44 +1,51 @@
 "use client"
 
 import type React from "react"
-
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import type { AuthUser } from "@/lib/types"
 
-export function AuthGuard({ children }: { children: React.ReactNode }) {
+function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const userStr = localStorage.getItem("user")
+    const checkAuth = () => {
+      const userStr = localStorage.getItem("user")
 
-    if (!userStr) {
-      router.push("/login")
-    } else {
+      if (!userStr) {
+        router.replace("/login")
+        return
+      }
+
       try {
         const user: AuthUser = JSON.parse(userStr)
         if (user.email && user.autoridad) {
           setIsAuthenticated(true)
         } else {
-          router.push("/login")
+          router.replace("/login")
         }
       } catch {
-        router.push("/login")
+        router.replace("/login")
+      } finally {
+        setIsLoading(false)
       }
     }
 
-    setIsLoading(false)
+    checkAuth()
   }, [router])
 
-  if (isLoading) {
+  if (isLoading || !isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
+        <div className="min-h-screen flex items-center justify-center bg-background">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        </div>
     )
   }
 
-  return isAuthenticated ? <>{children}</> : null
+  return <>{children}</>
 }
+
+export default AuthGuard
+export { AuthGuard }

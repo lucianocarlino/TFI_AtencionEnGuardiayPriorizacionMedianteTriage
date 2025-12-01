@@ -6,6 +6,7 @@ import app.domain.Ingreso;
 import app.domain.NivelEmergencia;
 import app.domain.Paciente;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +15,13 @@ import java.util.List;
 public class ServicioUrgencias {
     private RepositorioPacientes dbPacientes;
     private final List<Ingreso> listaEspera;
+    
+    @Autowired
     public ServicioUrgencias(RepositorioPacientes dbPacientes) {
         this.dbPacientes = dbPacientes;
         this.listaEspera = new ArrayList<>();
     }
+    
     public void registrarUrgencias(String cuilPaciente,
                                    Enfermera enfermera,
                                    String informe,
