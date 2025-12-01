@@ -62,4 +62,3 @@ public class ServicioRegistroPacientes {
         dbPacientes.guardarPaciente(paciente);
     }
 }
-

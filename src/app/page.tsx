@@ -1,18 +1,34 @@
-'use client'
+"use client"
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import Sidebar from '@/components/sidebar'
+import { useState, useEffect } from "react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import Sidebar from "@/components/sidebar"
+import { AuthGuard } from "@/components/auth-guard"
+import type { AuthUser } from "@/lib/types"
 
-export default function Home() {
-  const [showAlert, setShowAlert] = useState(false)
+function HomePage() {
+  const router = useRouter()
+  const [user, setUser] = useState<AuthUser | null>(null)
+
+  useEffect(() => {
+    const userStr = localStorage.getItem("user")
+    if (userStr) {
+      setUser(JSON.parse(userStr))
+    }
+  }, [])
+
+  const handleLogout = () => {
+    localStorage.removeItem("user")
+    router.push("/login")
+  }
 
   return (
     <div className="flex min-h-screen bg-background">
       <Sidebar />
-      
+
       <main className="flex-1">
         <div className="border-b border-border bg-card">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -20,6 +36,17 @@ export default function Home() {
               <div>
                 <h1 className="text-3xl font-bold text-foreground">Sistema de Urgencias Médicas</h1>
                 <p className="mt-2 text-muted-foreground">Gestión integral de pacientes y urgencias</p>
+              </div>
+              <div className="flex items-center gap-4">
+                {user && (
+                  <div className="text-right">
+                    <p className="text-sm font-medium text-foreground">{user.email}</p>
+                    <p className="text-xs text-muted-foreground">{user.autoridad}</p>
+                  </div>
+                )}
+                <Button variant="outline" onClick={handleLogout}>
+                  Cerrar Sesión
+                </Button>
               </div>
             </div>
           </div>
@@ -53,7 +80,12 @@ export default function Home() {
                   <div className="flex items-center gap-3">
                     <div className="p-3 bg-accent/10 rounded-lg">
                       <svg className="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M13 10V3L4 14h7v7l9-11h-7z"
+                        />
                       </svg>
                     </div>
                     <div>
@@ -73,7 +105,12 @@ export default function Home() {
                   <div className="flex items-center gap-3">
                     <div className="p-3 bg-primary/10 rounded-lg">
                       <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                        />
                       </svg>
                     </div>
                     <div>
@@ -91,11 +128,20 @@ export default function Home() {
           <div className="bg-gradient-to-r from-primary/5 to-accent/5 border border-border rounded-lg p-6">
             <h2 className="text-xl font-semibold text-foreground mb-2">Bienvenido al Sistema</h2>
             <p className="text-muted-foreground">
-              Este sistema permite gestionar de manera eficiente el registro de pacientes y la administración de urgencias médicas con priorización automática.
+              Este sistema permite gestionar de manera eficiente el registro de pacientes y la administración de
+              urgencias médicas con priorización automática.
             </p>
           </div>
         </div>
       </main>
     </div>
+  )
+}
+
+export default function Page() {
+  return (
+    <AuthGuard>
+      <HomePage />
+    </AuthGuard>
   )
 }

@@ -6,6 +6,7 @@ import app.interfaces.RepositorioUsuarios;
 import app.domain.ObraSocial;
 import app.domain.Paciente;
 import app.domain.Usuario;
+import app.domain.Autoridad;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
@@ -71,7 +72,15 @@ public class DBPrueba implements RepositorioPacientes, RepositorioObraSocial, Re
             this.pacientes.add(p3);
             this.pacientes.add(p4);
 
-
+            Usuario enfermero1 = new Usuario("enfermero@hospital.com", "password123", Autoridad.ENFERMERO);
+            Usuario enfermero2 = new Usuario("maria.lopez@hospital.com", "enfermera123", Autoridad.ENFERMERO);
+            Usuario medico1 = new Usuario("medico@hospital.com", "password123", Autoridad.MEDICO);
+            Usuario medico2 = new Usuario("dr.garcia@hospital.com", "medico123", Autoridad.MEDICO);
+            
+            this.usuarios.add(enfermero1);
+            this.usuarios.add(enfermero2);
+            this.usuarios.add(medico1);
+            this.usuarios.add(medico2);
 
         } catch (Exception e) {
             throw new RuntimeException( e.getMessage());
@@ -147,7 +156,9 @@ public class DBPrueba implements RepositorioPacientes, RepositorioObraSocial, Re
 
     @Override
     public Optional<Usuario> getUsuarioActual(String email, String contrasena) {
-        return Optional.ofNullable(usuarioActual);
+        return usuarios.stream()
+                .filter(usuario -> usuario.getEmail().equals(email) && usuario.getContrasena().equals(contrasena))
+                .findFirst();
     }
 
 

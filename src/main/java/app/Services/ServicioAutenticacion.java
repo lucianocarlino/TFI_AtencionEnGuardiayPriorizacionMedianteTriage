@@ -3,11 +3,13 @@ package app.Services;
 import app.interfaces.RepositorioUsuarios;
 import app.domain.Autoridad;
 import app.domain.Usuario;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class ServicioAutenticacion {
     private RepositorioUsuarios dbUsuarios;
     private Usuario usuarioActual;
