@@ -6,7 +6,7 @@ import AuthGuard from "@/components/auth-guard"
 
 export default function RegistrarPaciente() {
   return (
-    <AuthGuard>
+    <AuthGuard allowedRoles={["ENFERMERA"]}>
       <div className="flex min-h-screen bg-background">
         <Sidebar />
 

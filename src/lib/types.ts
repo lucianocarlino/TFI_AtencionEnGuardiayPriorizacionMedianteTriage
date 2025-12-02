@@ -123,3 +123,38 @@ export interface AuthUser {
   email: string
   autoridad: string
 }
+
+export interface ReclamarPacienteResponse {
+  mensaje: string
+  ingreso: IngresoResponse
+}
+
+export interface AtencionDTO {
+  cuil: string // CUIL del paciente del ingreso reclamado
+  informe: string
+}
+
+export interface AtencionResponse {
+  id: number
+  ingreso: IngresoResponse
+  informe: string
+  medico: {
+    cuil: string
+    nombre: string
+    apellido: string
+    email: string
+  }
+  fechaAtencion: string
+}
+
+export interface RegisterRequest {
+  email: string
+  contrasena: string
+  autoridad: "MEDICO" | "ENFERMERA"
+}
+
+export interface RegisterResponse {
+  email: string
+  autoridad: string
+  mensaje: string
+}

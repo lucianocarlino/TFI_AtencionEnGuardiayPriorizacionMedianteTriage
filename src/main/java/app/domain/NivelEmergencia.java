@@ -19,5 +19,11 @@ public enum NivelEmergencia {
         return this.nombre.equals(nombre);
     }
 
+    public String getNombre() {
+        return nombre;
+    }
 
+    public Integer getPrioridad() {
+        return prioridad;
+    }
 }

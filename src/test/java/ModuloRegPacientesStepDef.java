@@ -140,5 +140,3 @@ public class ModuloRegPacientesStepDef {
         assertThat(exceptionEsperada).isNull();
     }
 }
-
-
