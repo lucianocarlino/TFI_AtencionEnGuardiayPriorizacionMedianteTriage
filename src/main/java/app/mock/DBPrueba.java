@@ -7,6 +7,7 @@ import app.domain.ObraSocial;
 import app.domain.Paciente;
 import app.domain.Usuario;
 import app.domain.Autoridad;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
@@ -73,11 +74,19 @@ public class DBPrueba implements RepositorioPacientes, RepositorioObraSocial, Re
             this.pacientes.add(p4);
 
             // Creating test users with different roles
-            Usuario enfermero1 = new Usuario("enfermero@hospital.com", "password123", Autoridad.ENFERMERO);
-            Usuario enfermero2 = new Usuario("maria.lopez@hospital.com", "enfermera123", Autoridad.ENFERMERO);
-            Usuario medico1 = new Usuario("medico@hospital.com", "password123", Autoridad.MEDICO);
-            Usuario medico2 = new Usuario("dr.garcia@hospital.com", "medico123", Autoridad.MEDICO);
-            
+
+            //hasheo de contraseñas
+            String hash1 = BCrypt.hashpw("pass1", BCrypt.gensalt(10));
+            String hash2 = BCrypt.hashpw("pass2", BCrypt.gensalt(10));
+            String hash3 = BCrypt.hashpw("pass3", BCrypt.gensalt(10));
+            String hash4 = BCrypt.hashpw("pass4", BCrypt.gensalt(10));
+
+            Usuario enfermero1 = new Usuario("enfermero@hospital.com", hash1, Autoridad.ENFERMERO, "Leandro","Paredes");
+            Usuario enfermero2 = new Usuario("maria.lopez@hospital.com", hash2, Autoridad.ENFERMERO, "Agustin","Marchesin");
+            Usuario medico1 = new Usuario("medico@hospital.com", hash3, Autoridad.MEDICO, "Miguel","Merentiel");
+            Usuario medico2 = new Usuario("dr.garcia@hospital.com", hash4, Autoridad.MEDICO, "Pablo","Garcia");
+
+
             this.usuarios.add(enfermero1);
             this.usuarios.add(enfermero2);
             this.usuarios.add(medico1);

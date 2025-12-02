@@ -1,13 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Sidebar from "@/components/sidebar"
 import AuthGuard from "@/components/auth-guard"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { reclamarPaciente } from "@/lib/api"
+import { reclamarPaciente, obtenerProximoPaciente } from "@/lib/api"
 import type { IngresoResponse } from "@/lib/types"
 import { useToast } from "@/hooks/use-toast"
 
@@ -15,12 +15,32 @@ function ReclamarPacientePage() {
   const router = useRouter()
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
+  const [loadingProximo, setLoadingProximo] = useState(true)
+  const [proximoPaciente, setProximoPaciente] = useState<IngresoResponse | null>(null)
   const [pacienteReclamado, setPacienteReclamado] = useState<IngresoResponse | null>(null)
+
+  useEffect(() => {
+    const cargarProximoPaciente = async () => {
+      try {
+        const proximo = await obtenerProximoPaciente()
+        console.log("[v0] Próximo paciente en la cola:", proximo)
+        setProximoPaciente(proximo)
+      } catch (error) {
+        console.error("[v0] Error al obtener próximo paciente:", error)
+      } finally {
+        setLoadingProximo(false)
+      }
+    }
+
+    cargarProximoPaciente()
+  }, [])
 
   const handleReclamar = async () => {
     setLoading(true)
     try {
+      console.log("[v0] Iniciando reclamar paciente...")
       const response = await reclamarPaciente()
+      console.log("[v0] Respuesta del servidor:", response)
       setPacienteReclamado(response.ingreso)
 
       toast({
@@ -30,6 +50,7 @@ function ReclamarPacientePage() {
       })
 
       // Guardar el ingreso reclamado en localStorage para usarlo en la página de atención
+      console.log("[v0] Guardando ingreso en localStorage:", response.ingreso)
       localStorage.setItem("ingresoReclamado", JSON.stringify(response.ingreso))
 
       // Redirigir a la página de registrar atención
@@ -37,6 +58,7 @@ function ReclamarPacientePage() {
         router.push("/medico/atencion")
       }, 1500)
     } catch (error) {
+      console.error("[v0] Error en handleReclamar:", error)
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Error al reclamar paciente",
@@ -80,32 +102,127 @@ function ReclamarPacientePage() {
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {!pacienteReclamado ? (
-            <Card>
-              <CardHeader>
-                <CardTitle>Reclamar Próximo Paciente</CardTitle>
-                <CardDescription>
-                  Al reclamar un paciente, se te asignará automáticamente el próximo en la cola de urgencias según el
-                  nivel de prioridad
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <Alert>
-                  <AlertDescription>
-                    <strong>Nota:</strong> El paciente reclamado saldrá de la lista de espera y cambiará su estado a
-                    EN_PROCESO. Deberás completar el informe de atención antes de poder reclamar otro paciente.
-                  </AlertDescription>
-                </Alert>
+            <div className="space-y-6">
+              {loadingProximo ? (
+                <Card>
+                  <CardContent className="py-8">
+                    <p className="text-center text-muted-foreground">Cargando próximo paciente...</p>
+                  </CardContent>
+                </Card>
+              ) : proximoPaciente ? (
+                <>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Próximo Paciente en la Cola</CardTitle>
+                      <CardDescription>Información del paciente que será asignado al reclamar</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <p className="text-sm font-medium text-muted-foreground">Paciente</p>
+                          <p className="text-lg font-semibold text-foreground">
+                            {proximoPaciente.paciente.nombre} {proximoPaciente.paciente.apellido}
+                          </p>
+                        </div>
 
-                <div className="flex gap-4">
-                  <Button onClick={handleReclamar} disabled={loading} className="bg-primary hover:bg-primary/90">
-                    {loading ? "Reclamando..." : "Reclamar Próximo Paciente"}
-                  </Button>
-                  <Button type="button" variant="outline" onClick={() => router.push("/")}>
-                    Volver al Inicio
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+                        <div className="space-y-2">
+                          <p className="text-sm font-medium text-muted-foreground">CUIL</p>
+                          <p className="text-lg font-semibold text-foreground">{proximoPaciente.paciente.cuil}</p>
+                        </div>
+
+                        <div className="space-y-2">
+                          <p className="text-sm font-medium text-muted-foreground">Fecha de Ingreso</p>
+                          <p className="text-lg font-semibold text-foreground">
+                            {new Date(proximoPaciente.fechaIngreso).toLocaleString("es-AR")}
+                          </p>
+                        </div>
+
+                        <div className="space-y-2">
+                          <p className="text-sm font-medium text-muted-foreground">Nivel de Emergencia</p>
+                          <div
+                            className={`inline-block px-4 py-2 rounded-lg border-2 font-semibold ${getNivelColor(proximoPaciente.nivelEmergencia)}`}
+                          >
+                            {proximoPaciente.nivelEmergencia}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <p className="text-sm font-medium text-muted-foreground">Informe de Ingreso</p>
+                        <p className="text-foreground bg-muted p-3 rounded-lg">{proximoPaciente.informe}</p>
+                      </div>
+
+                      <div className="space-y-2">
+                        <p className="text-sm font-semibold text-foreground">Signos Vitales</p>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                          <div className="p-3 bg-muted rounded-lg">
+                            <p className="text-xs text-muted-foreground">Temperatura</p>
+                            <p className="text-lg font-semibold">{proximoPaciente.temperatura}°C</p>
+                          </div>
+                          <div className="p-3 bg-muted rounded-lg">
+                            <p className="text-xs text-muted-foreground">Freq. Cardíaca</p>
+                            <p className="text-lg font-semibold">{proximoPaciente.frecuenciaCardiaca.value} lpm</p>
+                          </div>
+                          <div className="p-3 bg-muted rounded-lg">
+                            <p className="text-xs text-muted-foreground">Freq. Respiratoria</p>
+                            <p className="text-lg font-semibold">{proximoPaciente.frecuenciaRespiratoria.value} rpm</p>
+                          </div>
+                          <div className="p-3 bg-muted rounded-lg">
+                            <p className="text-xs text-muted-foreground">Tensión Arterial</p>
+                            <p className="text-lg font-semibold">
+                              {proximoPaciente.tensionArterial.frecuenciaSistolica}/
+                              {proximoPaciente.tensionArterial.frecuenciaDiastolica}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Reclamar Paciente</CardTitle>
+                      <CardDescription>Confirma que deseas reclamar este paciente para atención</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      <Alert>
+                        <AlertDescription>
+                          <strong>Nota:</strong> Al reclamar este paciente, se te asignará automáticamente y saldrá de
+                          la lista de espera. Deberás completar el informe de atención antes de poder reclamar otro
+                          paciente.
+                        </AlertDescription>
+                      </Alert>
+
+                      <div className="flex gap-4">
+                        <Button onClick={handleReclamar} disabled={loading} className="bg-primary hover:bg-primary/90">
+                          {loading ? "Reclamando..." : "Reclamar Este Paciente"}
+                        </Button>
+                        <Button type="button" variant="outline" onClick={() => router.push("/")}>
+                          Volver al Inicio
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </>
+              ) : (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>No hay pacientes en espera</CardTitle>
+                    <CardDescription>No hay pacientes disponibles para reclamar en este momento</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Alert>
+                      <AlertDescription>
+                        La lista de espera está vacía. No hay pacientes pendientes de atención.
+                      </AlertDescription>
+                    </Alert>
+                    <div className="mt-6">
+                      <Button onClick={() => router.push("/")}>Volver al Inicio</Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
           ) : (
             <Card>
               <CardHeader>

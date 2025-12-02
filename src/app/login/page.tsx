@@ -30,12 +30,13 @@ export default function LoginPage() {
         contrasena: password,
       })
 
-      // Store user data in localStorage
       localStorage.setItem(
         "user",
         JSON.stringify({
           email: response.email,
           autoridad: response.autoridad,
+          nombre: response.nombre,
+          apellido: response.apellido,
         }),
       )
 
@@ -118,10 +119,10 @@ export default function LoginPage() {
             <p className="text-sm font-medium text-muted-foreground mb-2">Usuarios de prueba:</p>
             <div className="space-y-1 text-xs text-muted-foreground">
               <p>
-                <strong>Enfermero:</strong> enfermero@hospital.com / password123
+                <strong>Enfermero:</strong> enfermero@hospital.com / pass1
               </p>
               <p>
-                <strong>Médico:</strong> medico@hospital.com / password123
+                <strong>Médico:</strong> medico@hospital.com / pass3
               </p>
             </div>
           </div>

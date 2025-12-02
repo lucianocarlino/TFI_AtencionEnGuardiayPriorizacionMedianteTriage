@@ -25,14 +25,21 @@ function AtencionPage() {
   const [ingresoReclamado, setIngresoReclamado] = useState<IngresoResponse | null>(null)
 
   useEffect(() => {
+    console.log("[v0] Cargando ingreso reclamado del localStorage...")
     const ingreso = localStorage.getItem("ingresoReclamado")
+    console.log("[v0] Valor del localStorage:", ingreso)
+
     if (ingreso && ingreso !== "undefined") {
       try {
-        setIngresoReclamado(JSON.parse(ingreso))
+        const parsed = JSON.parse(ingreso)
+        console.log("[v0] Ingreso parseado exitosamente:", parsed)
+        setIngresoReclamado(parsed)
       } catch (error) {
-        console.error("Error al parsear el ingreso del localStorage:", error)
+        console.error("[v0] Error al parsear el ingreso del localStorage:", error)
         localStorage.removeItem("ingresoReclamado")
       }
+    } else {
+      console.warn("[v0] No hay ingreso reclamado en localStorage")
     }
   }, [])
 
@@ -51,11 +58,44 @@ function AtencionPage() {
         return
       }
 
-      try {
-        await registrarAtencion({
-          cuil: ingresoReclamado.paciente.cuil,
-          informe: values.informe,
+      const userStr = localStorage.getItem("user")
+      if (!userStr) {
+        toast({
+          title: "Error",
+          description: "No se encontró información del médico autenticado",
+          variant: "destructive",
         })
+        return
+      }
+
+      let user
+      try {
+        user = JSON.parse(userStr)
+        console.log("[v0] Usuario autenticado:", user)
+      } catch (error) {
+        console.error("[v0] Error al parsear usuario:", error)
+        toast({
+          title: "Error",
+          description: "Error al obtener información del médico",
+          variant: "destructive",
+        })
+        return
+      }
+
+      try {
+        const atencionData = {
+          cuilPaciente: ingresoReclamado.paciente.cuil,
+          medico: {
+            cuil: user.email, // Usando el email como identificador temporal
+            nombre: "Médico", // En un sistema real esto vendría del backend
+            apellido: "Sistema",
+            email: user.email,
+          },
+          informeAtencion: values.informe,
+        }
+
+        console.log("[v0] Enviando datos de atención:", atencionData)
+        await registrarAtencion(atencionData)
 
         toast({
           title: "Atención registrada",
@@ -64,6 +104,7 @@ function AtencionPage() {
         })
 
         // Limpiar el ingreso reclamado del localStorage
+        console.log("[v0] Limpiando localStorage...")
         localStorage.removeItem("ingresoReclamado")
 
         // Redirigir al inicio o a reclamar otro paciente
@@ -71,6 +112,7 @@ function AtencionPage() {
           router.push("/")
         }, 1500)
       } catch (error) {
+        console.error("[v0] Error al registrar atención:", error)
         toast({
           title: "Error",
           description: error instanceof Error ? error.message : "Error al registrar atención",

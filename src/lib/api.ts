@@ -37,6 +37,14 @@ export async function listarUrgencias(): Promise<IngresoResponse[]> {
   return await response.json()
 }
 
+export async function obtenerProximoPaciente(): Promise<IngresoResponse | null> {
+  const urgencias = await listarUrgencias()
+  if (urgencias.length === 0) {
+    return null
+  }
+  return urgencias[0]
+}
+
 export async function login(credentials: LoginRequest): Promise<LoginResponse> {
   const response = await fetch(`${AUTH_URL}/login`, {
     method: "POST",
@@ -98,22 +106,41 @@ export async function listarPacientes(): Promise<PacienteResponse[]> {
 }
 
 export async function reclamarPaciente(): Promise<ReclamarPacienteResponse> {
-  const response = await fetch(`${API_URL}/reclamar`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
+  console.log("[v0] Llamando a reclamarPaciente...")
+  console.log("[v0] URL del endpoint:", `${API_URL}/reclamar`)
 
-  if (!response.ok) {
-    const error = await response.text()
-    throw new Error(error || "Error al reclamar paciente")
+  try {
+    const response = await fetch(`${API_URL}/reclamar`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+
+    console.log("[v0] Response status:", response.status)
+    console.log("[v0] Response ok:", response.ok)
+
+    if (!response.ok) {
+      const error = await response.text()
+      console.error("[v0] Error al reclamar paciente:", error)
+      throw new Error(error || "Error al reclamar paciente")
+    }
+
+    const data = await response.json()
+    console.log("[v0] Paciente reclamado exitosamente:", data)
+    if (!data.ingreso) {
+      console.error("[v0] Respuesta del servidor no contiene campo 'ingreso':", data)
+      throw new Error("Respuesta inválida del servidor")
+    }
+    return data
+  } catch (error) {
+    console.error("[v0] Exception en reclamarPaciente:", error)
+    throw error
   }
-
-  return await response.json()
 }
 
 export async function registrarAtencion(datos: AtencionDTO): Promise<string> {
+  console.log("[v0] Llamando a registrarAtencion con datos:", datos)
   const response = await fetch(`${API_URL}/atencion`, {
     method: "POST",
     headers: {
@@ -124,10 +151,13 @@ export async function registrarAtencion(datos: AtencionDTO): Promise<string> {
 
   if (!response.ok) {
     const error = await response.text()
+    console.error("[v0] Error al registrar atención:", error)
     throw new Error(error || "Error al registrar atención")
   }
 
-  return await response.text()
+  const result = await response.text()
+  console.log("[v0] Atención registrada exitosamente:", result)
+  return result
 }
 
 export async function register(datos: RegisterRequest): Promise<RegisterResponse> {

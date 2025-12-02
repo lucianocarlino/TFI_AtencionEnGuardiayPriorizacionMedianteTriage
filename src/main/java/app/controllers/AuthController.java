@@ -4,6 +4,7 @@ import app.Services.ServicioAutenticacion;
 import app.dtos.LoginDTO;
 import app.dtos.LoginResponseDTO;
 import app.domain.Usuario;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,13 +20,16 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
         try {
+
             servicioAutenticacion.iniciarSesion(loginDTO.getEmail(), loginDTO.getContrasena());
             Usuario usuario = servicioAutenticacion.getUsuarioActual();
             
             LoginResponseDTO response = new LoginResponseDTO(
                 usuario.getEmail(),
                 usuario.getAutoridad(),
-                "Inicio de sesión exitoso"
+                "Inicio de sesión exitoso",
+                usuario.getNombre(),
+                usuario.getApellido()
             );
             
             return ResponseEntity.ok(response);
@@ -45,7 +49,9 @@ public class AuthController {
             LoginResponseDTO response = new LoginResponseDTO(
                 usuario.getEmail(),
                 usuario.getAutoridad(),
-                "Usuario actual"
+                "Usuario actual",
+                usuario.getNombre(),
+                usuario.getApellido()
             );
             
             return ResponseEntity.ok(response);

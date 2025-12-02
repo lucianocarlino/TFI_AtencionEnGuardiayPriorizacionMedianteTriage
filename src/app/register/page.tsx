@@ -16,6 +16,8 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
+  const [nombre, setNombre] = useState("")
+  const [apellido, setApellido] = useState("")
   const [role, setRole] = useState<"MEDICO" | "ENFERMERA">("ENFERMERA")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
@@ -35,6 +37,11 @@ export default function RegisterPage() {
       return
     }
 
+    if (!nombre.trim() || !apellido.trim()) {
+      setError("Nombre y apellido son obligatorios")
+      return
+    }
+
     setLoading(true)
 
     try {
@@ -42,6 +49,8 @@ export default function RegisterPage() {
         email,
         contrasena: password,
         autoridad: role,
+        nombre,
+        apellido,
       })
 
       // Auto login after successful registration
@@ -50,6 +59,8 @@ export default function RegisterPage() {
         JSON.stringify({
           email: response.email,
           autoridad: response.autoridad,
+          nombre: response.nombre,
+          apellido: response.apellido,
         }),
       )
 
@@ -83,6 +94,34 @@ export default function RegisterPage() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="nombre">Nombre *</Label>
+                <Input
+                  id="nombre"
+                  type="text"
+                  placeholder="Juan"
+                  value={nombre}
+                  onChange={(e) => setNombre(e.target.value)}
+                  required
+                  disabled={loading}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="apellido">Apellido *</Label>
+                <Input
+                  id="apellido"
+                  type="text"
+                  placeholder="Pérez"
+                  value={apellido}
+                  onChange={(e) => setApellido(e.target.value)}
+                  required
+                  disabled={loading}
+                />
+              </div>
+            </div>
+
             <div className="space-y-2">
               <Label htmlFor="email">Email *</Label>
               <Input

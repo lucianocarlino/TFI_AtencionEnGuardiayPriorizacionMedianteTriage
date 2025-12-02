@@ -3,6 +3,7 @@ package app.Services;
 import app.interfaces.RepositorioUsuarios;
 import app.domain.Autoridad;
 import app.domain.Usuario;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -25,8 +26,12 @@ public class ServicioAutenticacion {
 
     public void iniciarSesion(String email, String contrasena){
         Optional<Usuario> usuario = dbUsuarios.buscarUsuario(email);
+        String passwordEnBD = usuario.get().getContrasena();
+        boolean esValido = BCrypt.checkpw(contrasena,passwordEnBD );
+
+
         if (usuario.isPresent()){
-            if (contrasena != null && contrasena.equals(usuario.get().getContrasena())){
+            if (contrasena != null && esValido){
                 this.usuarioActual = usuario.get();
                 dbUsuarios.setUsuarioActual(usuarioActual);
             }
@@ -47,6 +52,17 @@ public class ServicioAutenticacion {
             throw new RuntimeException("Email existente");
         } else {
             Usuario usuarioNuevo = new Usuario(email, contrasena, autoridad);
+            this.usuarios.add(usuarioNuevo);
+            dbUsuarios.guardarUsuario(usuarioNuevo);
+        }
+    }
+
+    public void crearUsuario(String email, String contrasena, Autoridad autoridad, String nombre, String apellido){
+        Optional<Usuario> usuario = dbUsuarios.buscarUsuario(email);
+        if (usuario.isPresent()){
+            throw new RuntimeException("Email existente");
+        } else {
+            Usuario usuarioNuevo = new Usuario(email, contrasena, autoridad, nombre, apellido);
             this.usuarios.add(usuarioNuevo);
             dbUsuarios.guardarUsuario(usuarioNuevo);
         }

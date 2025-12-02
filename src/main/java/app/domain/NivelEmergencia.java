@@ -22,8 +22,4 @@ public enum NivelEmergencia {
     public String getNombre() {
         return nombre;
     }
-
-    public Integer getPrioridad() {
-        return prioridad;
-    }
 }

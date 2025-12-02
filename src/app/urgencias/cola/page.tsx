@@ -122,168 +122,60 @@ export default function ColaUrgencias() {
             </div>
 
             <div className="space-y-4">
-            {ingresosOrdenados.length === 0 ? (
+              {ingresosOrdenados.length === 0 ? (
                 <Card>
                   <CardContent className="pt-8">
-                    <p className="text-center text-muted-foreground">
-                      No hay ingresos registrados
-                    </p>
+                    <p className="text-center text-muted-foreground">No hay ingresos registrados</p>
                   </CardContent>
                 </Card>
-            ) : (
+              ) : (
                 ingresosOrdenados.map((ingreso, index) => {
-                  const nivelInfo = getNivelInfo(ingreso.nivelEmergencia);
-                  if (filtroNivel === "todos") {
-                    return (
-                        <Card
-                            key={ingreso.paciente.cuil}
-                            className={`border-2 ${nivelInfo.borderColor}`}
-                        >
-                          <CardContent className="pt-6">
-                            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                              <div className="flex-1">
-                                <div className="flex items-center gap-3 mb-3">
-                                  <div
-                                      className={`px-3 py-1 rounded-full text-sm font-bold ${nivelInfo.bg} ${nivelInfo.color}`}
-                                  >
-                                    #{index + 1} - {nivelInfo.label}
-                                  </div>
-                                </div>
-                                <h3 className="text-lg font-bold text-foreground">{`${ingreso.paciente.nombre} ${ingreso.paciente.apellido}`}</h3>
-                                <h3 className="text-lg text-foreground">
-                                  Estado: {ingreso.estado}
-                                </h3>
-                                <p className="text-sm text-muted-foreground">
-                                  CUIL: {ingreso.paciente.cuil}
-                                </p>
-                                <p className="text-sm text-muted-foreground mt-2">
-                                  Enfermera: {ingreso.enfermera.nombre}
-                                </p>
-                                <p className="text-sm text-foreground mt-3 leading-relaxed">
-                                  {ingreso.informe}
-                                </p>
-                              </div>
-
-                              <div className="md:w-80">
-                                <div className="bg-muted/50 rounded-lg p-4 space-y-2">
-                                  <h4 className="font-semibold text-foreground mb-3">
-                                    Signos Vitales
-                                  </h4>
-                                  <div className="grid grid-cols-2 gap-3 text-sm">
-                                    <div>
-                                      <p className="text-muted-foreground">
-                                        Temperatura
-                                      </p>
-                                      <p className="font-bold text-foreground">
-                                        {ingreso.temperatura}°C
-                                      </p>
-                                    </div>
-                                    <div>
-                                      <p className="text-muted-foreground">
-                                        Frecuencia Cardíaca
-                                      </p>
-                                      <p className="font-bold text-foreground">
-                                        {`${ingreso.frecuenciaCardiaca.value}`}{" "}
-                                        lpm
-                                      </p>
-                                    </div>
-                                    <div>
-                                      <p className="text-muted-foreground">
-                                        Frecuencia Respiratoria
-                                      </p>
-                                      <p className="font-bold text-foreground">
-                                        {`${ingreso.frecuenciaRespiratoria.value}`}{" "}
-                                        rpm
-                                      </p>
-                                    </div>
-                                    <div>
-                                      <p className="text-muted-foreground">
-                                        Tensión Arterial
-                                      </p>
-                                      <p className="font-bold text-foreground">
-                                        {`${ingreso.tensionArterial.frecuenciaSistolica}`}
-                                        /
-                                        {`${ingreso.tensionArterial.frecuenciaDiastolica}`}
-                                      </p>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                    );
-                  }
-                  else if(filtroNivel === "CRITICA") {
-                    return(
-                    <Card
-                        key={ingreso.paciente.cuil}
-                        className={`border-2 ${nivelInfo.borderColor}`}
-                    >
+                  const nivelInfo = getNivelInfo(ingreso.nivelEmergencia)
+                  return (
+                    <Card key={ingreso.paciente.cuil} className={`border-2 ${nivelInfo.borderColor}`}>
                       <CardContent className="pt-6">
                         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
                           <div className="flex-1">
                             <div className="flex items-center gap-3 mb-3">
                               <div
-                                  className={`px-3 py-1 rounded-full text-sm font-bold ${nivelInfo.bg} ${nivelInfo.color}`}
+                                className={`px-3 py-1 rounded-full text-sm font-bold ${nivelInfo.bg} ${nivelInfo.color}`}
                               >
                                 #{index + 1} - {nivelInfo.label}
                               </div>
                             </div>
                             <h3 className="text-lg font-bold text-foreground">{`${ingreso.paciente.nombre} ${ingreso.paciente.apellido}`}</h3>
-                            <h3 className="text-lg text-foreground">
-                              Estado: {ingreso.estado}
-                            </h3>
-                            <p className="text-sm text-muted-foreground">
-                              CUIL: {ingreso.paciente.cuil}
-                            </p>
+                            <h3 className="text-lg text-foreground">Estado: {ingreso.estado}</h3>
+                            <p className="text-sm text-muted-foreground">CUIL: {ingreso.paciente.cuil}</p>
                             <p className="text-sm text-muted-foreground mt-2">
-                              Enfermera: {ingreso.enfermera.nombre}
+                              Enfermera: {ingreso.enfermera.nombre} {ingreso.enfermera.apellido}
                             </p>
-                            <p className="text-sm text-foreground mt-3 leading-relaxed">
-                              {ingreso.informe}
-                            </p>
+                            <p className="text-sm text-foreground mt-3 leading-relaxed">{ingreso.informe}</p>
                           </div>
 
                           <div className="md:w-80">
                             <div className="bg-muted/50 rounded-lg p-4 space-y-2">
-                              <h4 className="font-semibold text-foreground mb-3">
-                                Signos Vitales
-                              </h4>
+                              <h4 className="font-semibold text-foreground mb-3">Signos Vitales</h4>
                               <div className="grid grid-cols-2 gap-3 text-sm">
                                 <div>
-                                  <p className="text-muted-foreground">
-                                    Temperatura
-                                  </p>
+                                  <p className="text-muted-foreground">Temperatura</p>
+                                  <p className="font-bold text-foreground">{ingreso.temperatura}°C</p>
+                                </div>
+                                <div>
+                                  <p className="text-muted-foreground">Frecuencia Cardíaca</p>
                                   <p className="font-bold text-foreground">
-                                    {ingreso.temperatura}°C
+                                    {`${ingreso.frecuenciaCardiaca.value}`} lpm
                                   </p>
                                 </div>
                                 <div>
-                                  <p className="text-muted-foreground">
-                                    Frecuencia Cardíaca
-                                  </p>
+                                  <p className="text-muted-foreground">Frecuencia Respiratoria</p>
                                   <p className="font-bold text-foreground">
-                                    {`${ingreso.frecuenciaCardiaca.value}`}{" "}
-                                    lpm
+                                    {`${ingreso.frecuenciaRespiratoria.value}`} rpm
                                   </p>
                                 </div>
                                 <div>
-                                  <p className="text-muted-foreground">
-                                    Frecuencia Respiratoria
-                                  </p>
+                                  <p className="text-muted-foreground">Tensión Arterial</p>
                                   <p className="font-bold text-foreground">
-                                    {`${ingreso.frecuenciaRespiratoria.value}`}{" "}
-                                    rpm
-                                  </p>
-                                </div>
-                                <div>
-                                  <p className="text-muted-foreground">
-                                    Tensión Arterial
-                                  </p>
-                                  <p className="font-bold text-foreground">
-                                    {`${ingreso.tensionArterial.frecuenciaSistolica}`}
-                                    /
+                                    {`${ingreso.tensionArterial.frecuenciaSistolica}`}/
                                     {`${ingreso.tensionArterial.frecuenciaDiastolica}`}
                                   </p>
                                 </div>
@@ -294,95 +186,10 @@ export default function ColaUrgencias() {
                       </CardContent>
                     </Card>
                   )
-                  }
-                  else if(filtroNivel === "EMERGENCIA") {
-                    return(
-                    <Card
-                        key={ingreso.paciente.cuil}
-                        className={`border-2 ${nivelInfo.borderColor}`}
-                    >
-                      <CardContent className="pt-6">
-                        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-3">
-                              <div
-                                  className={`px-3 py-1 rounded-full text-sm font-bold ${nivelInfo.bg} ${nivelInfo.color}`}
-                              >
-                                #{index + 1} - {nivelInfo.label}
-                              </div>
-                            </div>
-                            <h3 className="text-lg font-bold text-foreground">{`${ingreso.paciente.nombre} ${ingreso.paciente.apellido}`}</h3>
-                            <h3 className="text-lg text-foreground">
-                              Estado: {ingreso.estado}
-                            </h3>
-                            <p className="text-sm text-muted-foreground">
-                              CUIL: {ingreso.paciente.cuil}
-                            </p>
-                            <p className="text-sm text-muted-foreground mt-2">
-                              Enfermera: {ingreso.enfermera.nombre}
-                            </p>
-                            <p className="text-sm text-foreground mt-3 leading-relaxed">
-                              {ingreso.informe}
-                            </p>
-                          </div>
-
-                          <div className="md:w-80">
-                            <div className="bg-muted/50 rounded-lg p-4 space-y-2">
-                              <h4 className="font-semibold text-foreground mb-3">
-                                Signos Vitales
-                              </h4>
-                              <div className="grid grid-cols-2 gap-3 text-sm">
-                                <div>
-                                  <p className="text-muted-foreground">
-                                    Temperatura
-                                  </p>
-                                  <p className="font-bold text-foreground">
-                                    {ingreso.temperatura}°C
-                                  </p>
-                                </div>
-                                <div>
-                                  <p className="text-muted-foreground">
-                                    Frecuencia Cardíaca
-                                  </p>
-                                  <p className="font-bold text-foreground">
-                                    {`${ingreso.frecuenciaCardiaca.value}`}{" "}
-                                    lpm
-                                  </p>
-                                </div>
-                                <div>
-                                  <p className="text-muted-foreground">
-                                    Frecuencia Respiratoria
-                                  </p>
-                                  <p className="font-bold text-foreground">
-                                    {`${ingreso.frecuenciaRespiratoria.value}`}{" "}
-                                    rpm
-                                  </p>
-                                </div>
-                                <div>
-                                  <p className="text-muted-foreground">
-                                    Tensión Arterial
-                                  </p>
-                                  <p className="font-bold text-foreground">
-                                    {`${ingreso.tensionArterial.frecuenciaSistolica}`}
-                                    /
-                                    {`${ingreso.tensionArterial.frecuenciaDiastolica}`}
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                    )
-                  }
                 })
-            )}
+              )}
+            </div>
           </div>
-          </div>
-
-
-
         </main>
       </div>
     </AuthGuard>

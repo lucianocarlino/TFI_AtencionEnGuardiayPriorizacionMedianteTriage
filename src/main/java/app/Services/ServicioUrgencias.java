@@ -33,6 +33,13 @@ public class ServicioUrgencias {
                                    Float frecRespiratoria,
                                    Float frecuenciaSistolica,
                                    Float frecuenciaDiastolica) {
+        boolean pacienteEnEspera = listaEspera.stream()
+                .anyMatch(ingreso -> ingreso.getCuilPaciente().equals(cuilPaciente));
+        
+        if (pacienteEnEspera) {
+            throw new RuntimeException("El paciente ya se encuentra en la lista de espera");
+        }
+        
         Paciente paciente = dbPacientes.buscarPacientePorCuil(cuilPaciente).
                 orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
         try{

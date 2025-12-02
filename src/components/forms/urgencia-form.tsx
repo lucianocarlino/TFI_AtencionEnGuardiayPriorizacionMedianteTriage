@@ -41,12 +41,16 @@ const validationSchema = Yup.object({
 export default function UrgenciaForm() {
   const { toast } = useToast()
   const [userEmail, setUserEmail] = useState<string>("")
+  const [userNombre, setUserNombre] = useState<string>("")
+  const [userApellido, setUserApellido] = useState<string>("")
 
   useEffect(() => {
     const user = localStorage.getItem("user")
     if (user) {
       const userData = JSON.parse(user)
       setUserEmail(userData.email)
+      setUserNombre(userData.nombre || "")
+      setUserApellido(userData.apellido || "")
     }
   }, [])
 
@@ -73,7 +77,13 @@ export default function UrgenciaForm() {
           frecRespiratoria: Number.parseFloat(values.frecRespiratoria),
           frecuenciaSistolica: Number.parseFloat(values.frecuenciaSistolica),
           frecuenciaDiastolica: Number.parseFloat(values.frecuenciaDiastolica),
-          enfermera: { cuil: 1, nombre: userEmail },
+          enfermera: {
+            cuil: userEmail,
+            nombre: userNombre,
+            apellido: userApellido,
+            email: userEmail,
+            matricula: "MAT-001",
+          },
         }
 
         await registrarIngreso(ingresoDTO)
@@ -84,9 +94,10 @@ export default function UrgenciaForm() {
         })
         resetForm()
       } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : "Error al registrar urgencia"
         toast({
           title: "Error",
-          description: error instanceof Error ? error.message : "Error al registrar urgencia",
+          description: errorMessage,
           variant: "destructive",
         })
       } finally {
@@ -135,8 +146,32 @@ export default function UrgenciaForm() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-foreground mb-2">Enfermero/a *</label>
+              <label className="block text-sm font-medium text-foreground mb-2">Email Enfermero/a</label>
               <Input type="text" value={userEmail} readOnly className="bg-muted" />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">Nombre Enfermero/a</label>
+              <Input
+                type="text"
+                value={userNombre}
+                readOnly
+                className="bg-muted"
+                placeholder="Se obtiene automáticamente"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">Apellido Enfermero/a</label>
+              <Input
+                type="text"
+                value={userApellido}
+                readOnly
+                className="bg-muted"
+                placeholder="Se obtiene automáticamente"
+              />
             </div>
           </div>
 
