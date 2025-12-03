@@ -73,7 +73,9 @@ export default function PacienteForm() {
               <label className="block text-sm font-medium text-foreground mb-2">CUIL *</label>
               <Input
                 type="text"
-                {...formik.getFieldProps("cuil")}
+                name="cuil"
+                value={formik.values.cuil}
+                onChange={(e) => formik.setFieldValue("cuil", e.target.value)}
                 placeholder="20-12345678-9"
                 className={formik.touched.cuil && formik.errors.cuil ? "border-destructive" : ""}
               />

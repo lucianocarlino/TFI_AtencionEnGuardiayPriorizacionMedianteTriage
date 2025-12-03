@@ -8,6 +8,8 @@ import app.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Optional;
+
 @Service
 public class ServicioRegistroPacientes {
     private RepositorioPacientes dbPacientes;
@@ -22,6 +24,9 @@ public class ServicioRegistroPacientes {
         // Validaciones de campos mandatorios
         if (cuil == null || cuil.trim().isEmpty()) {
             throw new IllegalArgumentException("CUIL es un campo obligatorio");
+        }
+        if (dbPacientes.buscarPacientePorCuil(cuil).isPresent()) {
+            throw new IllegalArgumentException("Ya existe un paciente con este CUIL");
         }
         if (apellido == null || apellido.trim().isEmpty()) {
             throw new IllegalArgumentException("Apellido es un campo obligatorio");
