@@ -66,11 +66,11 @@ public class ModuloUrgStepDefinitions {
             String cuil  = fila.get("Cuil");
             String nombre = fila.get("Nombre");
             String apellido = fila.get("Apellido");
-            ObraSocial obraSocial = new ObraSocial(fila.get("ObraSocial"), "123" );
-            Afiliado afiliado = new Afiliado("1234", obraSocial);
-            Domicilio domicilio = new Domicilio("Federico", 1138, "San Miguel");
+            Domicilio direccion = new Domicilio("Calle", 123, "Localidad");
+            String obraSocialNombre =  fila.get("Obra social");
+            var  obraSocial = dbMockeada.buscarObraSocial(obraSocialNombre);
 
-            Paciente paciente = new  Paciente(cuil, nombre, apellido, afiliado, domicilio);
+            Paciente paciente = new  Paciente(cuil, nombre, apellido, direccion);
 
             dbMockeada.guardarPaciente(paciente);
         }
@@ -155,11 +155,12 @@ public class ModuloUrgStepDefinitions {
             String cuil  = fila.get("Cuil");
             String nombre = fila.get("Nombre");
             String apellido = fila.get("Apellido");
-            ObraSocial obraSocial = new ObraSocial(fila.get("ObraSocial"), "123" );
-            Afiliado afiliado = new Afiliado("1234", obraSocial);
-            Domicilio domicilio = new Domicilio("Federico", 1138, "San Miguel");
+            Domicilio direccion = new Domicilio("Calle", 123, "Localidad");
+            String obraSocialNombre =  fila.get("Obra social");
+            var obraSocial = dbMockeada.buscarObraSocial(obraSocialNombre);
 
-            Paciente paciente = new  Paciente(cuil, nombre, apellido, afiliado, domicilio);
+
+            Paciente paciente = new  Paciente(cuil, nombre, apellido, direccion);
             dbMockeada.guardarPaciente(paciente);
         }
     }
