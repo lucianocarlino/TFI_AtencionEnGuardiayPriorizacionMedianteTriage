@@ -1,5 +1,6 @@
 package domain;
 
+import app.domain.Domicilio;
 import app.domain.ObraSocial;
 import app.domain.Paciente;
 import org.junit.jupiter.api.Test;
@@ -19,12 +20,13 @@ class PacienteTest {
         String cuil = "20-12345678-9";
         String nombre = "Juan";
         String apellido = "Perez";
+        Domicilio direccion = new Domicilio("Calle", 123, "Localidad");
         ObraSocial obraSocial = new ObraSocial("OSDE","OS");
 
 
 
         // Ejecucion
-        Paciente paciente = new Paciente(cuil, nombre, apellido, obraSocial);
+        Paciente paciente = new Paciente(cuil, nombre, apellido, direccion);
         // Verificacion
         assertEquals(cuil, paciente.getCuil());
         assertEquals(nombre, paciente.getNombre());
@@ -38,9 +40,10 @@ class PacienteTest {
         String cuil = "20-12345678-9";
         String nombre = null;
         String apellido = "Perez";
+        Domicilio direccion = new Domicilio("Calle", 123, "Localidad");
         ObraSocial obraSocial = new ObraSocial("OSDE","OS");
         // Ejecucion y Verificacion
-        Paciente paciente = new Paciente(cuil, nombre, apellido, obraSocial);
+        Paciente paciente = new Paciente(cuil, nombre, apellido, direccion);
         assertNull(paciente.getNombre());
 
 
@@ -52,9 +55,10 @@ class PacienteTest {
         String cuil = "20-12345678-9";
         String nombre = "   ";
         String apellido = "Perez";
+        Domicilio  direccion = new Domicilio("Calle", 123, "Localidad");
         ObraSocial obraSocial = new ObraSocial("OSDE","OS");
         // Ejecucion y Verificacion
-        Paciente paciente = new Paciente(cuil, nombre, apellido, obraSocial);
+        Paciente paciente = new Paciente(cuil, nombre, apellido, direccion);
         assertEquals(nombre, paciente.getNombre());
     }
 
