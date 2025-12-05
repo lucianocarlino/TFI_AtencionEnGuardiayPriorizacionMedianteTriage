@@ -63,7 +63,7 @@ export default function ListarPacientes() {
                 {pacientes.map((paciente) => (
                   <Card key={paciente.cuil}>
                     <CardHeader>
-                      <CardTitle className="text-xl">{`${paciente.nombre} ${paciente.apellido}`}</CardTitle>
+                      <CardTitle className="text-xl">{`${paciente.apellido} ${paciente.nombre}`}</CardTitle>
                       <CardDescription>CUIL: {paciente.cuil}</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-2">

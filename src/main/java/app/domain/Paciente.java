@@ -7,12 +7,11 @@ public class Paciente {
     private Afiliado afiliado;
     private Domicilio direccion;
 
-    public Paciente(String cuil, String nombre, String apellido, ObraSocial obraSocial) {
+    public Paciente(String cuil, String nombre, String apellido, Domicilio direccion) {
         this.cuil = cuil;
         this.nombre = nombre;
         this.apellido = apellido;
-        this.afiliado = new Afiliado();
-        this.afiliado.setObraSocial(obraSocial);
+        this.direccion = direccion;
         validarCampos();
     }
 

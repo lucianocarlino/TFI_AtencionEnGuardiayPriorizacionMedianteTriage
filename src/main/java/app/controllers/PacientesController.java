@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,6 +69,8 @@ public class PacientesController {
     public ResponseEntity<List<PacienteDTO>> listarPacientes() {
         try {
             List<Paciente> pacientes = dbPrueba.obtenerTodosLosPacientes();
+            pacientes.sort(Comparator.comparing(Paciente::getApellido)
+                    .thenComparing(Paciente::getNombre));
             
             List<PacienteDTO> pacientesDTO = pacientes.stream()
                 .map(p -> {

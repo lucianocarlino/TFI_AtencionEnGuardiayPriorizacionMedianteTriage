@@ -28,7 +28,9 @@ class ServicioUrgenciasTest {
     @Test
     public void primerPaciente() {
         ObraSocial obrasocial = new ObraSocial("subsidio", "ss");
-        Paciente paciente = new Paciente("12345678", "Juan", "Perez", obrasocial);
+        Afiliado afiliado = new Afiliado("123", obrasocial);
+        Domicilio direccion = new Domicilio("Federico", 1138, "San Miguel de Tucuman");
+        Paciente paciente = new Paciente("12345678", "Juan", "Perez", afiliado, direccion);
         Enfermera enfermera = new Enfermera("87654321", "Ana", "Gomez", "enfermera@gmail", "1234");
         String informePaciente = "Informe de prueba";
         when(dbPacientes.buscarPacientePorCuil("12345678")).thenReturn(java.util.Optional.of(paciente));

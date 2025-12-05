@@ -1,12 +1,9 @@
 package app.mock;
 
+import app.domain.*;
 import app.interfaces.RepositorioObraSocial;
 import app.interfaces.RepositorioPacientes;
 import app.interfaces.RepositorioUsuarios;
-import app.domain.ObraSocial;
-import app.domain.Paciente;
-import app.domain.Usuario;
-import app.domain.Autoridad;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Repository;
 
@@ -23,6 +20,7 @@ public class DBPrueba implements RepositorioPacientes, RepositorioObraSocial, Re
     public DBPrueba() {
         this.pacientes = new ArrayList<>();
         this.obrasociales = new LinkedHashMap<>();
+
         this.usuarios = new ArrayList<>();
         // ... inicialización de mapas ...
 
@@ -44,27 +42,33 @@ public class DBPrueba implements RepositorioPacientes, RepositorioObraSocial, Re
                     "20-12345678-9",
                     "Juan",
                     "Perez",
-                    osde
+                    new Afiliado("12", osde),
+                    new Domicilio("Federico", 1138, "San Miguel de Tucuman")
+
+
             );
 
             Paciente p2 = new Paciente(
                     "20-98765432-1",
                     "Ana",
                     "Martinez",
-                    pami
+                    new Afiliado("12", pami),
+                    new Domicilio("Federico", 1138, "San Miguel de Tucuman")
             );
             Paciente p3 = new Paciente(
                     "30-12345678-9",
                     "Lionel",
                     "Messi",
-                    osde
+                    new Afiliado("13", osde),
+                    new Domicilio("Federico", 1138, "San Miguel de Tucuman")
             );
 
             Paciente p4 = new Paciente(
                     "30-98765432-1",
                     "Maria",
                     "Becerra",
-                    pami
+                    new Afiliado("13", pami),
+                    new Domicilio("Federico", 1138, "San Miguel de Tucuman")
             );
 
             // 3. Los agrego a la lista
@@ -92,10 +96,35 @@ public class DBPrueba implements RepositorioPacientes, RepositorioObraSocial, Re
             this.usuarios.add(medico1);
             this.usuarios.add(medico2);
 
-            this.registrarAfiliacion("20-12345678-9", "OSDE", "123456");
-            this.registrarAfiliacion("20-98765432-1", "PAMI", "789012");
-            this.registrarAfiliacion("30-12345678-9", "OSDE", "345678");
-            this.registrarAfiliacion("30-98765432-1", "PAMI", "901234");
+            this.registrarAfiliacion(p1.getCuil(),p1.getObraSocialNombre(), p1.getAfiliado().getNumAfiliado());
+            this.registrarAfiliacion(p2.getCuil(),p2.getObraSocialNombre(), p2.getAfiliado().getNumAfiliado());
+            this.registrarAfiliacion(p3.getCuil(),p3.getObraSocialNombre(), p3.getAfiliado().getNumAfiliado());
+            this.registrarAfiliacion(p4.getCuil(),p4.getObraSocialNombre(), p4.getAfiliado().getNumAfiliado());
+
+
+            this.registrarAfiliacion("20-12345678-1", pami.getNombre(), "1");
+            this.registrarAfiliacion("20-12345678-2", pami.getNombre(), "2");
+            this.registrarAfiliacion("20-12345678-3", pami.getNombre(), "3");
+            this.registrarAfiliacion("20-12345678-4", pami.getNombre(), "4");
+            this.registrarAfiliacion("20-12345678-5", pami.getNombre(), "5");
+            this.registrarAfiliacion("20-12345678-6", pami.getNombre(), "6");
+            this.registrarAfiliacion("20-12345678-7", pami.getNombre(), "7");
+            this.registrarAfiliacion("20-12345678-8", pami.getNombre(), "8");
+            this.registrarAfiliacion("20-12345678-9", pami.getNombre(), "9");
+            this.registrarAfiliacion("20-12345679-1", pami.getNombre(), "10");
+            this.registrarAfiliacion("20-12345679-2", pami.getNombre(), "11");
+
+            this.registrarAfiliacion("20-87654321-1", osde.getNombre(), "1");
+            this.registrarAfiliacion("20-87654321-2", osde.getNombre(), "2");
+            this.registrarAfiliacion("20-87654321-3", osde.getNombre(), "3");
+            this.registrarAfiliacion("20-87654321-4", osde.getNombre(), "4");
+            this.registrarAfiliacion("20-87654321-5", osde.getNombre(), "5");
+            this.registrarAfiliacion("20-87654321-6", osde.getNombre(), "6");
+            this.registrarAfiliacion("20-87654321-7", osde.getNombre(), "7");
+            this.registrarAfiliacion("20-87654321-8", osde.getNombre(), "8");
+            this.registrarAfiliacion("20-87654321-9", osde.getNombre(), "9");
+
+
 
         } catch (Exception e) {
             throw new RuntimeException( e.getMessage());

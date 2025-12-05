@@ -6,6 +6,8 @@ import { Card, CardContent } from "@/components/ui/card"
 import type { NivelEmergencia, IngresoResponse } from "@/lib/types"
 import { listarUrgencias } from "@/lib/api"
 import AuthGuard from "@/components/auth-guard"
+import { formatDistanceToNow } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 export default function ColaUrgencias() {
   const [ingresos, setIngresos] = useState<IngresoResponse[]>([])
@@ -83,6 +85,7 @@ export default function ColaUrgencias() {
           <div className="border-b border-border bg-card">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
               <h1 className="text-3xl font-bold text-foreground">Cola de Urgencias</h1>
+                <h2 className="text-2xl font-bold text-foreground"> Ultima actualización: {new Date().toLocaleString('es-AR',{dateStyle:"short", timeStyle:"short"})}</h2>
               <p className="mt-2 text-muted-foreground">Visualiza todos los ingresos ordenados por prioridad</p>
             </div>
           </div>
@@ -145,9 +148,16 @@ export default function ColaUrgencias() {
                             </div>
                             <h3 className="text-lg font-bold text-foreground">{`${ingreso.paciente.nombre} ${ingreso.paciente.apellido}`}</h3>
                             <h3 className="text-lg text-foreground">Estado: {ingreso.estado}</h3>
+                              <h3 className="text-lg text-foreground">
+                                  Fecha y hora de Triage:
+                                  {new Date(ingreso.fechaIngreso).toLocaleString('es-AR',{dateStyle:"short", timeStyle:"short"})}
+                              </h3>
+                              <h3 className="text-lg text-foreground">
+                                  Ingresó hace: {formatDistanceToNow(new Date(ingreso.fechaIngreso), { addSuffix: true, locale: es })}
+                              </h3>
                             <p className="text-sm text-muted-foreground">CUIL: {ingreso.paciente.cuil}</p>
                             <p className="text-sm text-muted-foreground mt-2">
-                              Enfermera: {ingreso.enfermera.nombre} {ingreso.enfermera.apellido}
+                              Enfermer@: {ingreso.enfermera.nombre} {ingreso.enfermera.apellido}
                             </p>
                             <p className="text-sm text-foreground mt-3 leading-relaxed">{ingreso.informe}</p>
                           </div>
