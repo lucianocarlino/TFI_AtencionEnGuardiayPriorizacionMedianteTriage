@@ -15,6 +15,11 @@ public class Enfermera{
         this.email = email;
         this.matricula = matricula;
     }
+    public Enfermera(String nombre, String apellido) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+
+    }
 
     public String getCuil() {
         return cuil;

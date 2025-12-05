@@ -6,6 +6,7 @@ import app.interfaces.RepositorioPacientes;
 import app.interfaces.RepositorioUsuarios;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Repository;
+import app.domain.Paciente;
 
 import java.util.*;
 

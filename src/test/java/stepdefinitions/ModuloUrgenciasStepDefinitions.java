@@ -1,14 +1,11 @@
 package stepdefinitions;
 
 import app.ServicioUrgencias;
-import domain.Enfermera;
-import domain.Ingreso;
-import domain.NivelEmergencia;
-import domain.Paciente;
+import app.domain.*;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import mock.DBPrueba;
+import app.mock.DBPrueba;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,8 +26,8 @@ public class ModuloUrgenciasStepDefinitions {
 
     @Given("Que la siguiente enfermera esta registrada:")
     public void queLaSiguienteEnfermeraEstaRegistrada(List<Map<String, String>> tabla) {
-        String nombre = tabla.getFirst().get("nombre");
-        String apellido = tabla.getFirst().get("apellido");
+        String nombre = tabla.get(0).get("nombre");
+        String apellido = tabla.get(0).get("apellido");
 
         enfermera = new Enfermera(nombre, apellido);
 
@@ -42,9 +39,11 @@ public class ModuloUrgenciasStepDefinitions {
             String cuil  = fila.get("Cuil");
             String nombre = fila.get("Nombre");
             String apellido = fila.get("Apellido");
-            String obraSocial =  fila.get("Obra social");
+            ObraSocial obraSocial = new ObraSocial(fila.get("ObraSocial"), "123" );
+            Afiliado afiliado = new Afiliado("1234", obraSocial);
+            Domicilio domicilio = new Domicilio("Federico", 1138, "San Miguel");
 
-            Paciente paciente = new  Paciente(cuil, nombre, apellido, obraSocial);
+            Paciente paciente = new  Paciente(cuil, nombre, apellido, afiliado, domicilio);
 
             dbMockeada.guardarPaciente(paciente);
         }
@@ -52,7 +51,7 @@ public class ModuloUrgenciasStepDefinitions {
 
     @When("Ingresa a urgencias el siguiente paciente:")
     public void ingresaAUrgenciasElSiguientePaciente(List<Map<String, String>> tabla) {
-        Map<String,String> fila = tabla.getFirst();
+        Map<String,String> fila = tabla.get(0);
         String cuil   = fila.get("Cuil");
         String informe = fila.get("Informe");
         NivelEmergencia nivelEmergencia = Arrays.stream(NivelEmergencia.values()).
@@ -70,7 +69,7 @@ public class ModuloUrgenciasStepDefinitions {
 
     @Then("La lista de espera esta ordenada por cuil de la siguiente manera:")
     public void laListaDeEsperaEstaOrdenadaPorCuilDeLaSiguienteManera(List<String> lista) {
-        String cuilEsperado = lista.getFirst();
+        String cuilEsperado = lista.get(0);
         List<String> cuilsPendientes = servicioUrgencias.obtenerIngresosPendientes()
                 .stream()
                 .map(Ingreso::getCuilPaciente)

@@ -1,8 +1,5 @@
 import app.Services.ServicioUrgencias;
-import app.domain.Enfermera;
-import app.domain.NivelEmergencia;
-import app.domain.ObraSocial;
-import app.domain.Paciente;
+import app.domain.*;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -40,11 +37,11 @@ public class ModuloUrgStepDefinitions {
 
     @Given("Que la siguiente enfermera esta registrada:")
     public void queLaSiguienteEnfermeraEstaRegistrada(List<Map<String, String>> tabla) {
-        String cuil = tabla.getFirst().get("Cuil");
-        String nombre = tabla.getFirst().get("Nombre");
-        String apellido = tabla.getFirst().get("Apellido");
-        String correo = tabla.getFirst().get("Correo");
-        String matricula = tabla.getFirst().get("Matricula");
+        String cuil = tabla.get(0).get("Cuil");
+        String nombre = tabla.get(0).get("Nombre");
+        String apellido = tabla.get(0).get("Apellido");
+        String correo = tabla.get(0).get("Correo");
+        String matricula = tabla.get(0).get("Matricula");
 
         enfermera = new Enfermera(cuil,nombre, apellido, correo, matricula);
 
@@ -69,10 +66,11 @@ public class ModuloUrgStepDefinitions {
             String cuil  = fila.get("Cuil");
             String nombre = fila.get("Nombre");
             String apellido = fila.get("Apellido");
-            String obraSocialNombre =  fila.get("Obra social");
-            var  obraSocial = dbMockeada.buscarObraSocial(obraSocialNombre);
+            ObraSocial obraSocial = new ObraSocial(fila.get("ObraSocial"), "123" );
+            Afiliado afiliado = new Afiliado("1234", obraSocial);
+            Domicilio domicilio = new Domicilio("Federico", 1138, "San Miguel");
 
-            Paciente paciente = new  Paciente(cuil, nombre, apellido, obraSocial);
+            Paciente paciente = new  Paciente(cuil, nombre, apellido, afiliado, domicilio);
 
             dbMockeada.guardarPaciente(paciente);
         }
@@ -157,11 +155,11 @@ public class ModuloUrgStepDefinitions {
             String cuil  = fila.get("Cuil");
             String nombre = fila.get("Nombre");
             String apellido = fila.get("Apellido");
-            String obraSocialNombre =  fila.get("Obra social");
-            var obraSocial = dbMockeada.buscarObraSocial(obraSocialNombre);
+            ObraSocial obraSocial = new ObraSocial(fila.get("ObraSocial"), "123" );
+            Afiliado afiliado = new Afiliado("1234", obraSocial);
+            Domicilio domicilio = new Domicilio("Federico", 1138, "San Miguel");
 
-
-            Paciente paciente = new  Paciente(cuil, nombre, apellido, obraSocial);
+            Paciente paciente = new  Paciente(cuil, nombre, apellido, afiliado, domicilio);
             dbMockeada.guardarPaciente(paciente);
         }
     }

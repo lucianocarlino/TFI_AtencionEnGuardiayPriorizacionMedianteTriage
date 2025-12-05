@@ -1,10 +1,10 @@
 package app;
 
 import app.interfaces.RepositorioPacientes;
-import domain.Enfermera;
-import domain.Ingreso;
-import domain.NivelEmergencia;
-import domain.Paciente;
+import app.domain.Enfermera;
+import app.domain.Ingreso;
+import app.domain.NivelEmergencia;
+import app.domain.Paciente;
 
 import java.util.ArrayList;
 import java.util.List;

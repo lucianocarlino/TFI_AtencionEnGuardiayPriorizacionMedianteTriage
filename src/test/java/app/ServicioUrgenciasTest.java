@@ -50,7 +50,7 @@ class ServicioUrgenciasTest {
 
         //Validacion
         List<Ingreso> ingresosPendientes = servicioUrgencias.obtenerIngresosPendientes();
-        assertThat(ingresosPendientes.getFirst().getCuilPaciente()).isEqualTo(paciente.getCuil());
+        assertThat(ingresosPendientes.get(0).getCuilPaciente()).isEqualTo(paciente.getCuil());
     }
 
     @Test
