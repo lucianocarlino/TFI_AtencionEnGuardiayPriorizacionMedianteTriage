@@ -1,5 +1,6 @@
 package domain;
 
+import app.domain.Afiliado;
 import app.domain.Domicilio;
 import app.domain.ObraSocial;
 import app.domain.Paciente;
@@ -22,11 +23,12 @@ class PacienteTest {
         String apellido = "Perez";
         Domicilio direccion = new Domicilio("Calle", 123, "Localidad");
         ObraSocial obraSocial = new ObraSocial("OSDE","OS");
+        Afiliado afiliado = new Afiliado("123", obraSocial);
 
 
 
         // Ejecucion
-        Paciente paciente = new Paciente(cuil, nombre, apellido, direccion);
+        Paciente paciente = new Paciente(cuil, nombre, apellido, afiliado, direccion);
         // Verificacion
         assertEquals(cuil, paciente.getCuil());
         assertEquals(nombre, paciente.getNombre());
@@ -43,9 +45,11 @@ class PacienteTest {
         Domicilio direccion = new Domicilio("Calle", 123, "Localidad");
         ObraSocial obraSocial = new ObraSocial("OSDE","OS");
         // Ejecucion y Verificacion
-        Paciente paciente = new Paciente(cuil, nombre, apellido, direccion);
-        assertNull(paciente.getNombre());
+        RuntimeException excepcion = assertThrows(RuntimeException.class, () -> {
+            new Paciente(cuil, nombre, apellido, direccion);
+        });
 
+        assertEquals(excepcion.getMessage(), "Nombre es un campo obligatorio");
 
     }
 

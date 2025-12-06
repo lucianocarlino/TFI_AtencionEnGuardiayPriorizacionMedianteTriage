@@ -81,10 +81,10 @@ public class DBPrueba implements RepositorioPacientes, RepositorioObraSocial, Re
             // Creating test users with different roles
 
             //hasheo de contraseñas
-            String hash1 = BCrypt.hashpw("pass1", BCrypt.gensalt(10));
-            String hash2 = BCrypt.hashpw("pass2", BCrypt.gensalt(10));
-            String hash3 = BCrypt.hashpw("pass3", BCrypt.gensalt(10));
-            String hash4 = BCrypt.hashpw("pass4", BCrypt.gensalt(10));
+            String hash1 = BCrypt.hashpw("password1", BCrypt.gensalt(10));
+            String hash2 = BCrypt.hashpw("password2", BCrypt.gensalt(10));
+            String hash3 = BCrypt.hashpw("password3", BCrypt.gensalt(10));
+            String hash4 = BCrypt.hashpw("password4", BCrypt.gensalt(10));
 
             Usuario enfermero1 = new Usuario("enfermero@hospital.com", hash1, Autoridad.ENFERMERO, "Leandro","Paredes");
             Usuario enfermero2 = new Usuario("maria.lopez@hospital.com", hash2, Autoridad.ENFERMERO, "Agustin","Marchesin");

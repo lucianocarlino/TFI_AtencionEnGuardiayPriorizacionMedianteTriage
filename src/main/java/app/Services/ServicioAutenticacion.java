@@ -66,7 +66,7 @@ public class ServicioAutenticacion {
         Optional<Usuario> usuario = dbUsuarios.buscarUsuario(email);
         if (usuario.isPresent()){
             throw new RuntimeException("Email existente");
-        } else {
+        }  else {
             Usuario usuarioNuevo = new Usuario(email, contrasena, autoridad, nombre, apellido);
             this.usuarios.add(usuarioNuevo);
             dbUsuarios.guardarUsuario(usuarioNuevo);

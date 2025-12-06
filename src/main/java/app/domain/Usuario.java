@@ -44,7 +44,7 @@ public class Usuario {
         }
         if (this.contrasena == null ){
             throw new RuntimeException("Contrasena es un campo obligatorio");
-        } else if (this.contrasena.length() < 4 ) {
+        } else if (this.contrasena.length() < 8 ) {
             throw new RuntimeException("Contrasena demasiado corta");
         }
 

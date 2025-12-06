@@ -14,10 +14,10 @@ Feature: Autenticacion
   Scenario: Inicio de sesion exitoso de un usuario
     When  Intenta iniciar sesion el siguiente usuario:
       | Email             | Contrasena |
-      | enfermero@hospital.com | pass1 |
+      | enfermero@hospital.com | password1 |
     Then El usuario actual es:
       | Email             | Contrasena | Autoridad |
-      | enfermero@hospital.com | pass1 | Enfermero    |
+      | enfermero@hospital.com | password1 | Enfermero    |
 
   Scenario: Inicio de sesion fallido por usuario incorrecto
     When Intenta iniciar sesion el siguiente usuario:
@@ -34,19 +34,19 @@ Feature: Autenticacion
   Scenario: Registro fallido de un usuario con email invalido
     When Intenta crearse el siguiente usuario:
       | Email        | Contrasena | Autoridad |
-      | liomessi.com | lio10      |           |
+      | liomessi.com | lio10      |     Medico      |
     Then El sistema muestra el mensaje de error "Email invalido"
 
   Scenario: Regustro fallido de un usuario con email existente
     When Intenta crearse el siguiente usuario:
       | Email             | Contrasena | Autoridad |
-      | luciano@gmail.com | lio10      |           |
+      | luciano@gmail.com | lio10      |    Medico       |
     Then El sistema muestra el mensaje de error "Email existente"
 
   Scenario: Registro fallido de un usuario con contrasena invalida
     When Intenta crearse el siguiente usuario:
       | Email           | Contrasena | Autoridad |
-      | liomessi@10.com | 1234567    |           |
+      | liomessi@10.com | 1234567    |    Medico       |
     Then El sistema muestra el mensaje de error "Contrasena demasiado corta"
 
   Scenario: Registro exitoso de un usuario con autoridad vinculada
