@@ -21,6 +21,8 @@ public class Enfermera{
 
     }
 
+    public Enfermera() {}
+
     public String getCuil() {
         return cuil;
     }
