@@ -14,10 +14,10 @@ Feature: Autenticacion
   Scenario: Inicio de sesion exitoso de un usuario
     When  Intenta iniciar sesion el siguiente usuario:
       | Email             | Contrasena |
-      | luciano@gmail.com | luciano123 |
+      | enfermero@hospital.com | pass1 |
     Then El usuario actual es:
       | Email             | Contrasena | Autoridad |
-      | luciano@gmail.com | luciano123 | Medico    |
+      | enfermero@hospital.com | pass1 | Enfermero    |
 
   Scenario: Inicio de sesion fallido por usuario incorrecto
     When Intenta iniciar sesion el siguiente usuario:

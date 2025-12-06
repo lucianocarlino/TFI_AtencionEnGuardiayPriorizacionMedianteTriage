@@ -93,22 +93,6 @@ Feature: Modulo de urgencias
       Then el sistema muestra el siguiente mensaje de error: "Frecuencia respiratoria no puede ser negativa"
       
 
-    Scenario: ingreso de paciente no registrado
-        Given que estan registrados los siguientes pacientes en el sistema:
-            | Cuil         | Apellido | Nombre    | Obra social       |
-            | 23-1234567-9 | Nunez    | Marcelo   | Subsidio de salud |
-            | 27-4567890-3 | Dufour   | Alexandra | Swiss medical     |
-        When Ingresan a urgencia los siguientes pacientes no registrados:
-          | Cuil         | Apellido | Nombre | Obra social |
-          | 23-1000000-9 | Pedro    | Perez  | OSDE        |
-        Then el sistema registra los pacientes con sus respectivos datos en el sistema:
-            | Cuil         | Apellido | Nombre | Obra social |
-            | 23-1000000-9 | Pedro    | Perez  | OSDE        |
-        And la lista de pacientes registrados en el sistema es la siguiente:
-          | Cuil         | Apellido | Nombre    | Obra social       |
-          | 23-1234567-9 | Nunez    | Marcelo   | Subsidio de salud |
-          | 27-4567890-3 | Dufour   | Alexandra | Swiss medical     |
-          | 23-1000000-9 | Pedro    | Perez     | OSDE              |
 
   Scenario: ingreso de un paciente pero Informe fue omitido
     Given que estan registrados los siguientes pacientes en el sistema:

@@ -7,6 +7,7 @@ import io.cucumber.java.en.When;
 import app.mock.DBPrueba;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -169,12 +170,14 @@ public class ModuloUrgStepDefinitions {
     public void laListaDePacientesRegistradosEnElSistemaEsLaSiguiente( List<Map <String, String>> lista) {
         List<Map<String, String>> pacientesRegistrados = dbMockeada.obtenerTodosLosPacientes()
                 .stream()
-                .map(paciente -> Map.of(
-                        "Cuil", paciente.getCuil(),
-                        "Nombre", paciente.getNombre(),
-                        "Apellido", paciente.getApellido(),
-                        "Obra social",paciente.getObraSocialNombre()
-                ))
+                .map(paciente -> {
+                    Map<String, String> datos = new LinkedHashMap<>();
+                    datos.put("Cuil", paciente.getCuil());
+                    datos.put("Nombre", paciente.getNombre());
+                    datos.put("Apellido", paciente.getApellido());
+                    datos.put("Obra social", paciente.getObraSocialNombre());
+                    return datos;
+                })
                 .toList();
 
         assertThat(pacientesRegistrados).isEqualTo(lista);

@@ -63,9 +63,9 @@ public class ModuloAutenticacionStepDefinitions {
     public void intentaIniciarSesionElSiguienteUsuario(List<Map<String, String>> tabla) {
         excepcionEsperada = null;
         for (Map<String, String> usuario : tabla) {
-        String email =  usuario.get("Email");
-        String contrasena = usuario.get("Contrasena");
         try {
+            String email =  usuario.get("Email");
+            String contrasena = usuario.get("Contrasena");
             servicioAutenticacion.iniciarSesion(email, contrasena);
         } catch(RuntimeException e) {
             this.excepcionEsperada = e;

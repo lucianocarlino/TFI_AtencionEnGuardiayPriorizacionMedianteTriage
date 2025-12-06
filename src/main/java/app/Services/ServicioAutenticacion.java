@@ -26,18 +26,23 @@ public class ServicioAutenticacion {
 
     public void iniciarSesion(String email, String contrasena){
         Optional<Usuario> usuario = dbUsuarios.buscarUsuario(email);
-        String passwordEnBD = usuario.get().getContrasena();
-        boolean esValido = BCrypt.checkpw(contrasena,passwordEnBD );
-
 
         if (usuario.isPresent()){
-            if (contrasena != null && esValido){
-                this.usuarioActual = usuario.get();
-                dbUsuarios.setUsuarioActual(usuarioActual);
+            String passwordEnBD = usuario.get().getContrasena();
+            try{
+                boolean esValido = BCrypt.checkpw(contrasena,passwordEnBD );
+                if (contrasena != null && esValido){
+                    this.usuarioActual = usuario.get();
+                    dbUsuarios.setUsuarioActual(usuarioActual);
+                }
+                else {
+                    throw new RuntimeException("Usuario o contrasena invalido");
+                }
             }
-            else {
+            catch(Exception e) {
                 throw new RuntimeException("Usuario o contrasena invalido");
             }
+
         } else {
             throw new RuntimeException("Usuario o contrasena invalido");
         }
