@@ -153,15 +153,3 @@ export interface AtencionResponse {
   }
   fechaAtencion: string
 }
-
-export interface RegisterRequest {
-  email: string
-  contrasena: string
-  autoridad: "MEDICO" | "ENFERMERA"
-}
-
-export interface RegisterResponse {
-  email: string
-  autoridad: string
-  mensaje: string
-}

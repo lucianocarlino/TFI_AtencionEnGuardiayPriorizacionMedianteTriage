@@ -4,7 +4,6 @@ import type { LoginRequest, LoginResponse } from "@/lib/types"
 import type { PacienteRegistroDTO, PacienteResponse } from "@/lib/types"
 import type { ReclamarPacienteResponse } from "@/lib/types"
 import type { AtencionDTO, AtencionResponse } from "@/lib/types"
-import type { RegisterRequest, RegisterResponse } from "@/lib/types"
 
 const API_URL = "http://localhost:8080/sistema-urgencias/api/v1/urgencias"
 const AUTH_URL = "http://localhost:8080/sistema-urgencias/api/v1/auth"
@@ -156,22 +155,7 @@ export async function registrarAtencion(datos: AtencionDTO): Promise<string> {
   return result
 }
 
-export async function register(datos: RegisterRequest): Promise<RegisterResponse> {
-  const response = await fetch(`${AUTH_URL}/register`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(datos),
-  })
 
-  if (!response.ok) {
-    const error = await response.text()
-    throw new Error(error || "Error al registrar usuario")
-  }
-
-  return await response.json()
-}
 
 export async function listarAtencionesMedico(): Promise<AtencionResponse[]> {
   const userStr = localStorage.getItem("user")
