@@ -103,7 +103,6 @@ public class ModuloUrgStepDefinitions {
                 String[] partes = tensionArterialStr.split("/",-1);
                 sistolica = parseFloatOpcional(partes[0].trim());
                 diastolica = parseFloatOpcional(partes[1].trim());
-                //System.out.println("Presion sistolica: " + sistolica + ", diastolica: " + diastolica);
             }
             try {
                 servicioUrgencias.registrarUrgencias(cuil, enfermera, informe, nivelEmergencia, temperatura, frecuenciaCardiaca, frecuenciaRespiratoria, sistolica, diastolica);

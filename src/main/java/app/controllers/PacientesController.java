@@ -66,37 +66,13 @@ public class PacientesController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PacienteDTO>> listarPacientes() {
+    public ResponseEntity<List<Paciente>> listarPacientes() {
         try {
             List<Paciente> pacientes = dbPrueba.obtenerTodosLosPacientes();
             pacientes.sort(Comparator.comparing(Paciente::getApellido)
                     .thenComparing(Paciente::getNombre));
-            
-            List<PacienteDTO> pacientesDTO = pacientes.stream()
-                .map(p -> {
-                    PacienteDTO dto = new PacienteDTO();
-                    dto.setCuil(p.getCuil());
-                    dto.setNombre(p.getNombre());
-                    dto.setApellido(p.getApellido());
-                    
-                    // Safe access to direccion
-                    if (p.getDireccion() != null) {
-                        dto.setCalle(p.getDireccion().getCalle());
-                        dto.setNumero(String.valueOf(p.getDireccion().getNumero()));
-                        dto.setLocalidad(p.getDireccion().getLocalidad());
-                    }
-                    
-                    // Safe access to obra social
-                    if (p.getAfiliado() != null && p.getAfiliado().getObraSocial() != null) {
-                        dto.setObraSocial(p.getAfiliado().getObraSocial().getNombre());
-                        dto.setNumAfiliado(p.getAfiliado().getNumAfiliado());
-                    }
-                    
-                    return dto;
-                })
-                .collect(Collectors.toList());
-            
-            return ResponseEntity.ok(pacientesDTO);
+
+            return ResponseEntity.ok(pacientes);
         } catch (Exception e) {
             e.printStackTrace(); // Log the error for debugging
             return ResponseEntity.internalServerError().build();

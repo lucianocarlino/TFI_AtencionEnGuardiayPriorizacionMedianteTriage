@@ -22,18 +22,22 @@ const validationSchema = Yup.object({
     .max(43, "Temperatura debe ser menor a 43°C"),
   frecCardiaca: Yup.number()
     .required("Frecuencia cardíaca es obligatoria")
+    .positive("La frecuencia cardíaca debe ser un valor positivo")
     .min(30, "Frecuencia cardíaca debe ser mayor a 30 lpm")
     .max(250, "Frecuencia cardíaca debe ser menor a 250 lpm"),
   frecRespiratoria: Yup.number()
     .required("Frecuencia respiratoria es obligatoria")
+    .positive("La frecuencia respiratoria debe ser un valor positivo")
     .min(8, "Frecuencia respiratoria debe ser mayor a 8 rpm")
     .max(60, "Frecuencia respiratoria debe ser menor a 60 rpm"),
   frecuenciaSistolica: Yup.number()
     .required("Presión sistólica es obligatoria")
+    .positive("La presión sistólica debe ser un valor positivo")
     .min(70, "Presión sistólica debe ser mayor a 70 mmHg")
     .max(250, "Presión sistólica debe ser menor a 250 mmHg"),
   frecuenciaDiastolica: Yup.number()
     .required("Presión diastólica es obligatoria")
+    .positive("La presión diastólica debe ser un valor positivo")
     .min(40, "Presión diastólica debe ser mayor a 40 mmHg")
     .max(150, "Presión diastólica debe ser menor a 150 mmHg"),
 })
@@ -94,9 +98,21 @@ export default function UrgenciaForm() {
         })
         resetForm()
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Error al registrar urgencia"
+        let errorMessage = "Error al registrar urgencia"
+
+        if (error instanceof Error) {
+          const message = error.message.toLowerCase()
+          if (message.includes("paciente") && message.includes("no existe")) {
+            errorMessage = "El paciente con ese CUIL no existe en el sistema. Por favor, regístralo primero."
+          } else if (message.includes("cuil")) {
+            errorMessage = "CUIL inválido. Verifica el formato (XX-XXXXXXXX-X)"
+          } else {
+            errorMessage = error.message
+          }
+        }
+
         toast({
-          title: "Error",
+          title: "Error al registrar urgencia",
           description: errorMessage,
           variant: "destructive",
         })

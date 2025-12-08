@@ -8,6 +8,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Repository;
 import app.domain.Paciente;
 
+
 import java.util.*;
 
 @Repository
@@ -71,6 +72,8 @@ public class DBPrueba implements RepositorioPacientes, RepositorioObraSocial, Re
                     new Afiliado("13", pami),
                     new Domicilio("Federico", 1138, "San Miguel de Tucuman")
             );
+
+
 
             // 3. Los agrego a la lista
             this.pacientes.add(p1);

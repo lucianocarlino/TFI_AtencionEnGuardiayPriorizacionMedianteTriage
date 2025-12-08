@@ -3,7 +3,7 @@ import type { IngresoResponse } from "@/lib/types"
 import type { LoginRequest, LoginResponse } from "@/lib/types"
 import type { PacienteRegistroDTO, PacienteResponse } from "@/lib/types"
 import type { ReclamarPacienteResponse } from "@/lib/types"
-import type { AtencionDTO } from "@/lib/types"
+import type { AtencionDTO, AtencionResponse } from "@/lib/types"
 import type { RegisterRequest, RegisterResponse } from "@/lib/types"
 
 const API_URL = "http://localhost:8080/sistema-urgencias/api/v1/urgencias"
@@ -102,12 +102,12 @@ export async function listarPacientes(): Promise<PacienteResponse[]> {
   if (!response.ok) {
     throw new Error("Error al obtener lista de pacientes")
   }
+
   return await response.json()
 }
 
 export async function reclamarPaciente(): Promise<ReclamarPacienteResponse> {
-  console.log("[v0] Llamando a reclamarPaciente...")
-  console.log("[v0] URL del endpoint:", `${API_URL}/reclamar`)
+
 
   try {
     const response = await fetch(`${API_URL}/reclamar`, {
@@ -117,30 +117,27 @@ export async function reclamarPaciente(): Promise<ReclamarPacienteResponse> {
       },
     })
 
-    console.log("[v0] Response status:", response.status)
-    console.log("[v0] Response ok:", response.ok)
 
     if (!response.ok) {
       const error = await response.text()
-      console.error("[v0] Error al reclamar paciente:", error)
+      console.error("Error al reclamar paciente:", error)
       throw new Error(error || "Error al reclamar paciente")
     }
 
     const data = await response.json()
-    console.log("[v0] Paciente reclamado exitosamente:", data)
     if (!data.ingreso) {
-      console.error("[v0] Respuesta del servidor no contiene campo 'ingreso':", data)
+      console.error(" Respuesta del servidor no contiene campo 'ingreso':", data)
       throw new Error("Respuesta inválida del servidor")
     }
     return data
   } catch (error) {
-    console.error("[v0] Exception en reclamarPaciente:", error)
+    console.error(" Exception en reclamarPaciente:", error)
     throw error
   }
 }
 
 export async function registrarAtencion(datos: AtencionDTO): Promise<string> {
-  console.log("[v0] Llamando a registrarAtencion con datos:", datos)
+
   const response = await fetch(`${API_URL}/atencion`, {
     method: "POST",
     headers: {
@@ -151,12 +148,11 @@ export async function registrarAtencion(datos: AtencionDTO): Promise<string> {
 
   if (!response.ok) {
     const error = await response.text()
-    console.error("[v0] Error al registrar atención:", error)
+    console.error(" Error al registrar atención:", error)
     throw new Error(error || "Error al registrar atención")
   }
 
   const result = await response.text()
-  console.log("[v0] Atención registrada exitosamente:", result)
   return result
 }
 
@@ -174,5 +170,31 @@ export async function register(datos: RegisterRequest): Promise<RegisterResponse
     throw new Error(error || "Error al registrar usuario")
   }
 
+  return await response.json()
+}
+
+export async function listarAtencionesMedico(): Promise<AtencionResponse[]> {
+  const userStr = localStorage.getItem("user")
+  if (!userStr) {
+    throw new Error("No hay usuario autenticado")
+  }
+
+  let user
+  try {
+    user = JSON.parse(userStr)
+  } catch (error) {
+    throw new Error("Error al obtener información del médico")
+  }
+
+  const response = await fetch(`${API_URL}/atenciones/medico?email=${encodeURIComponent(user.email)}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+  if (!response.ok) {
+    const error = await response.text()
+    throw new Error(error || "Error al obtener las atenciones del médico")
+  }
   return await response.json()
 }

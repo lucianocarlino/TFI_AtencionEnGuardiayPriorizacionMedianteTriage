@@ -1,11 +1,11 @@
 package app.domain;
 
 public class Paciente {
-    private String cuil;
-    private String nombre;
-    private String apellido;
-    private Afiliado afiliado;
-    private Domicilio direccion;
+    public String cuil;
+    public String nombre;
+    public String apellido;
+    public Afiliado afiliado;
+    public Domicilio direccion;
 
     public Paciente(String cuil, String nombre, String apellido, Domicilio direccion) {
         this.cuil = cuil;

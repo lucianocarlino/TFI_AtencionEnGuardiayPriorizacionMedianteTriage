@@ -15,6 +15,8 @@ public class Medico {
         this.matricula = matricula;
     }
 
+    public Medico() {}
+
     public String getCuil() {
         return cuil;
     }

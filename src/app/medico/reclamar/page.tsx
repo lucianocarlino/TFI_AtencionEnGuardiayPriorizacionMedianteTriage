@@ -23,10 +23,9 @@ function ReclamarPacientePage() {
     const cargarProximoPaciente = async () => {
       try {
         const proximo = await obtenerProximoPaciente()
-        console.log("[v0] Próximo paciente en la cola:", proximo)
         setProximoPaciente(proximo)
       } catch (error) {
-        console.error("[v0] Error al obtener próximo paciente:", error)
+        console.error("Error al obtener próximo paciente:", error)
       } finally {
         setLoadingProximo(false)
       }
@@ -38,9 +37,8 @@ function ReclamarPacientePage() {
   const handleReclamar = async () => {
     setLoading(true)
     try {
-      console.log("[v0] Iniciando reclamar paciente...")
       const response = await reclamarPaciente()
-      console.log("[v0] Respuesta del servidor:", response)
+
       setPacienteReclamado(response.ingreso)
 
       toast({
@@ -49,16 +47,12 @@ function ReclamarPacientePage() {
         variant: "default",
       })
 
-      // Guardar el ingreso reclamado en localStorage para usarlo en la página de atención
-      console.log("[v0] Guardando ingreso en localStorage:", response.ingreso)
       localStorage.setItem("ingresoReclamado", JSON.stringify(response.ingreso))
 
-      // Redirigir a la página de registrar atención
       setTimeout(() => {
         router.push("/medico/atencion")
       }, 1500)
     } catch (error) {
-      console.error("[v0] Error en handleReclamar:", error)
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Error al reclamar paciente",
