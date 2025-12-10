@@ -39,7 +39,7 @@ class ServicioAutenticacionTest {
         when(dbUsuarios.buscarUsuario(email)).thenReturn(Optional.empty());
 
         // When
-        servicio.crearUsuario(email, contrasena, autoridad);
+        servicio.crearUsuario(email, contrasena, autoridad, "", "");
 
         // Then - Verificar que se guardó el usuario
         verify(dbUsuarios, times(1)).guardarUsuario(any(Usuario.class));
@@ -75,7 +75,7 @@ class ServicioAutenticacionTest {
 
         // When & Then
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            servicio.crearUsuario(emailInvalido, contrasena, autoridad);
+            servicio.crearUsuario(emailInvalido, contrasena, autoridad, "", "");
         });
 
         assertThat(exception.getMessage()).isEqualTo("Email invalido");
@@ -92,7 +92,7 @@ class ServicioAutenticacionTest {
 
         // When & Then
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            servicio.crearUsuario(emailInvalido, contrasena, autoridad);
+            servicio.crearUsuario(emailInvalido, contrasena, autoridad, "", "");
         });
 
         assertThat(exception.getMessage()).isEqualTo("Email invalido");
@@ -109,7 +109,7 @@ class ServicioAutenticacionTest {
 
         // When & Then
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            servicio.crearUsuario(email, contrasenaCorta, autoridad);
+            servicio.crearUsuario(email, contrasenaCorta, autoridad, "", "");
         });
 
         assertThat(exception.getMessage()).isEqualTo("Contrasena demasiado corta");
@@ -126,7 +126,7 @@ class ServicioAutenticacionTest {
 
         // When & Then
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            servicio.crearUsuario(email, contrasenaNula, autoridad);
+            servicio.crearUsuario(email, contrasenaNula, autoridad, "", "");
         });
 
         assertThat(exception.getMessage()).isEqualTo("Contrasena es un campo obligatorio");
@@ -147,7 +147,7 @@ class ServicioAutenticacionTest {
 
         // When & Then
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            servicio.crearUsuario(email, contrasena, autoridad);
+            servicio.crearUsuario(email, contrasena, autoridad, "", "");
         });
 
         assertThat(exception.getMessage()).isEqualTo("Email existente");
@@ -166,7 +166,7 @@ class ServicioAutenticacionTest {
         when(dbUsuarios.buscarUsuario(email)).thenReturn(Optional.empty());
 
         // When
-        servicio.crearUsuario(email, contrasenaMinima, autoridad);
+        servicio.crearUsuario(email, contrasenaMinima, autoridad, "", "");
 
         // Then - Verificar que se guardó el usuario
         verify(dbUsuarios, times(1)).guardarUsuario(any(Usuario.class));
@@ -298,7 +298,7 @@ class ServicioAutenticacionTest {
         when(dbUsuarios.buscarUsuario(email)).thenReturn(Optional.empty());
 
         // When
-        servicio.crearUsuario(email, contrasena, autoridad);
+        servicio.crearUsuario(email, contrasena, autoridad, "", "");
 
         // Then
         verify(dbUsuarios, times(1)).guardarUsuario(argThat(usuario ->
@@ -318,7 +318,7 @@ class ServicioAutenticacionTest {
         when(dbUsuarios.buscarUsuario(email)).thenReturn(Optional.empty());
 
         // When
-        servicio.crearUsuario(email, contrasena, autoridad);
+        servicio.crearUsuario(email, contrasena, autoridad, "", "");
 
         // Then
         verify(dbUsuarios, times(1)).guardarUsuario(argThat(usuario ->

@@ -76,11 +76,14 @@ public class ServicioUrgencias {
         // Obtener el primer paciente de la lista (mayor prioridad)
         Ingreso ingreso = listaEspera.get(0);
         ingreso1 = ingreso;
+        if (ingreso.getEstado().equals(EstadoIngreso.EN_PROCESO)){
+            throw new RuntimeException("Ya hay un paciente reclamado");
+        }
         // Cambiar el estado a EN_PROCESO
         ingreso.cambiarEstado(EstadoIngreso.EN_PROCESO);
         
         // Remover de la lista de espera
-        listaEspera.remove(0);
+        //listaEspera.remove(0); //me parece que habria que borrarlo despues
         
         return ingreso;
     }
