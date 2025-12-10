@@ -92,7 +92,7 @@ public class ServicioUrgencias {
         if (informeAtencion == null || informeAtencion.trim().isEmpty()) {
             throw new RuntimeException("El informe de atención es obligatorio");
         }
-
+        listaEspera.remove(0);
         Atencion atencion = new Atencion(ingreso1,medico,informeAtencion );
         atenciones.add(atencion);
     }
