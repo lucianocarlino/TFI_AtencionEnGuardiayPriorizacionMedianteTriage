@@ -22,7 +22,6 @@ export interface IngresoDTO {
   frecuenciaSistolica: number
   frecuenciaDiastolica: number
   enfermera: {
-    // Si solo envías ID, ajusta esto. Si envías objeto:
     id?: number
     nombre?: string
   } | null
@@ -42,7 +41,7 @@ export interface Paciente {
   nombre: string
   apellido: string
   afiliado: Afiliado // Objeto anidado
-  direccion?: Domicilio // Puede ser null (según tu primer constructor)
+  direccion?: Domicilio
 }
 
 export interface Enfermera {
@@ -53,23 +52,20 @@ export interface Enfermera {
   matricula: string
 }
 
-// --- Sub-estructuras ---
 export interface ObraSocial {
-  // Asumo que tu clase ObraSocial tiene estos campos
   identificador: string
   nombre: string
 }
 
 export interface Afiliado {
   obraSocial: ObraSocial
-  numAfiliado: string // Si tu clase Afiliado lo tiene
+  numAfiliado: string
 }
 
 export interface Domicilio {
   calle: string
   numero: number
   localidad: string
-  // Agrega aquí lo que tenga tu clase Domicilio
 }
 
 export interface PacienteRegistroDTO {
@@ -92,7 +88,6 @@ export interface PacienteResponse {
   direccion?: Domicilio
 }
 
-// 3. La Interfaz Principal de Respuesta
 export interface IngresoResponse {
   paciente: Paciente
   enfermera: Enfermera
@@ -101,11 +96,10 @@ export interface IngresoResponse {
   nivelEmergencia: NivelEmergencia
   estado: EstadoIngreso
 
-  // Aquí está la diferencia clave por tus Value Objects:
   temperatura: number
-  frecuenciaCardiaca: FrecuenciaValue // Será un objeto, no un número directo
-  frecuenciaRespiratoria: FrecuenciaValue // Será un objeto
-  tensionArterial: TensionArterialValue // Será un objeto
+  frecuenciaCardiaca: FrecuenciaValue
+  frecuenciaRespiratoria: FrecuenciaValue
+  tensionArterial: TensionArterialValue
 }
 
 export interface LoginRequest {
