@@ -11,12 +11,7 @@ public class Usuario {
     private String apellido;
 
     public Usuario(String email, String contrasena, Autoridad autoridad){
-        this.email = email;
-        this.contrasena = contrasena;
-        this.autoridad = autoridad;
-        this.nombre = "";
-        this.apellido = "";
-        validarCampos();
+        this(email, contrasena, autoridad, "", "");
     }
 
     public Usuario(String email, String contrasena, Autoridad autoridad, String nombre, String apellido){

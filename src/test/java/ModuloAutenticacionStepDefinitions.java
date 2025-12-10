@@ -106,7 +106,7 @@ public class ModuloAutenticacionStepDefinitions {
                     .orElse(null);
         }
         try {
-            servicioAutenticacion.crearUsuario(email, contrasena, autoridad);
+            servicioAutenticacion.crearUsuario(email, contrasena, autoridad, "", "");
         } catch(RuntimeException e) {
             this.excepcionEsperada = e;
         }
@@ -128,7 +128,7 @@ public class ModuloAutenticacionStepDefinitions {
                     .orElse(null);
 
             Usuario usuario = new Usuario(email, contrasena, autoridad);
-            servicioAutenticacion.crearUsuario(email, contrasena, autoridad);
+            servicioAutenticacion.crearUsuario(email, contrasena, autoridad, "", "");
             dbMockeada.guardarUsuario(usuario);
     }
 }}
