@@ -8,6 +8,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Repository;
 import app.domain.Paciente;
 
+
 import java.util.*;
 
 @Repository
@@ -23,28 +24,20 @@ public class DBPrueba implements RepositorioPacientes, RepositorioObraSocial, Re
         this.obrasociales = new LinkedHashMap<>();
 
         this.usuarios = new ArrayList<>();
-        // ... inicialización de mapas ...
 
-        // --- CARGA DE DATOS INICIALES ---
-
-        // 1. Creo una Obra Social (Mock) para asignársela a los pacientes
-        // (Ajusta este constructor a como sea tu clase ObraSocial)
         ObraSocial osde = new ObraSocial("OSDE", "osd1");
         ObraSocial pami = new ObraSocial("PAMI", "pm1");
 
-        // Guardo las obras sociales en su mapa (si es necesario)
         this.obrasociales.put(osde.getIdentificador(), osde);
         this.obrasociales.put(pami.getIdentificador(), pami);
 
-        // 2. Creo los Pacientes usando el constructor que mostraste primero
-        // public Paciente(String cuil, String nombre, String apellido, ObraSocial obraSocial)
         try {
             Paciente p1 = new Paciente(
                     "20-12345678-9",
                     "Juan",
                     "Perez",
                     new Afiliado("12", osde),
-                    new Domicilio("Federico", 1138, "San Miguel de Tucuman")
+                    new Domicilio("Chacabuco", 1138, "San Miguel de Tucuman")
 
 
             );
@@ -54,31 +47,30 @@ public class DBPrueba implements RepositorioPacientes, RepositorioObraSocial, Re
                     "Ana",
                     "Martinez",
                     new Afiliado("12", pami),
-                    new Domicilio("Federico", 1138, "San Miguel de Tucuman")
+                    new Domicilio("Ayacucho", 1138, "San Miguel de Tucuman")
             );
             Paciente p3 = new Paciente(
                     "30-12345678-9",
                     "Lionel",
                     "Messi",
                     new Afiliado("13", osde),
-                    new Domicilio("Federico", 1138, "San Miguel de Tucuman")
+                    new Domicilio("Jujuy", 1138, "San Miguel de Tucuman")
             );
+
+            Afiliado a1 = null;
 
             Paciente p4 = new Paciente(
                     "30-98765432-1",
                     "Maria",
                     "Becerra",
-                    new Afiliado("13", pami),
-                    new Domicilio("Federico", 1138, "San Miguel de Tucuman")
+                    new Afiliado("10", osde),
+                    new Domicilio("Catamarca", 1138, "San Miguel de Tucuman")
             );
 
-            // 3. Los agrego a la lista
             this.pacientes.add(p1);
             this.pacientes.add(p2);
             this.pacientes.add(p3);
             this.pacientes.add(p4);
-
-            // Creating test users with different roles
 
             //hasheo de contraseñas
             String hash1 = BCrypt.hashpw("password1", BCrypt.gensalt(10));
@@ -91,7 +83,6 @@ public class DBPrueba implements RepositorioPacientes, RepositorioObraSocial, Re
             Usuario medico1 = new Usuario("medico@hospital.com", hash3, Autoridad.MEDICO, "Miguel","Merentiel");
             Usuario medico2 = new Usuario("dr.garcia@hospital.com", hash4, Autoridad.MEDICO, "Pablo","Garcia");
 
-
             this.usuarios.add(enfermero1);
             this.usuarios.add(enfermero2);
             this.usuarios.add(medico1);
@@ -101,7 +92,6 @@ public class DBPrueba implements RepositorioPacientes, RepositorioObraSocial, Re
             this.registrarAfiliacion(p2.getCuil(),p2.getObraSocialNombre(), p2.getAfiliado().getNumAfiliado());
             this.registrarAfiliacion(p3.getCuil(),p3.getObraSocialNombre(), p3.getAfiliado().getNumAfiliado());
             this.registrarAfiliacion(p4.getCuil(),p4.getObraSocialNombre(), p4.getAfiliado().getNumAfiliado());
-
 
             this.registrarAfiliacion("20-12345678-1", pami.getNombre(), "1");
             this.registrarAfiliacion("20-12345678-2", pami.getNombre(), "2");
@@ -124,8 +114,6 @@ public class DBPrueba implements RepositorioPacientes, RepositorioObraSocial, Re
             this.registrarAfiliacion("20-87654321-7", osde.getNombre(), "7");
             this.registrarAfiliacion("20-87654321-8", osde.getNombre(), "8");
             this.registrarAfiliacion("20-87654321-9", osde.getNombre(), "9");
-
-
 
         } catch (Exception e) {
             throw new RuntimeException( e.getMessage());

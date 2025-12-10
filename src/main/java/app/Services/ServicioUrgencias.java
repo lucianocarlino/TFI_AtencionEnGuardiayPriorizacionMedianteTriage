@@ -7,21 +7,26 @@ import app.domain.Medico;
 import app.domain.NivelEmergencia;
 import app.domain.Paciente;
 import app.domain.EstadoIngreso;
+import app.domain.Atencion;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ServicioUrgencias {
     private RepositorioPacientes dbPacientes;
     private final List<Ingreso> listaEspera;
+    private final List<Atencion> atenciones;
+    public Ingreso ingreso1 = new Ingreso();
     
     @Autowired
     public ServicioUrgencias(RepositorioPacientes dbPacientes) {
         this.dbPacientes = dbPacientes;
         this.listaEspera = new ArrayList<>();
+        this.atenciones = new ArrayList<>();
     }
     
     public void registrarUrgencias(String cuilPaciente,
@@ -70,12 +75,15 @@ public class ServicioUrgencias {
         
         // Obtener el primer paciente de la lista (mayor prioridad)
         Ingreso ingreso = listaEspera.get(0);
-        
+        ingreso1 = ingreso;
+        if (ingreso.getEstado().equals(EstadoIngreso.EN_PROCESO)){
+            throw new RuntimeException("Ya hay un paciente reclamado");
+        }
         // Cambiar el estado a EN_PROCESO
         ingreso.cambiarEstado(EstadoIngreso.EN_PROCESO);
         
         // Remover de la lista de espera
-        listaEspera.remove(0);
+        //listaEspera.remove(0); //me parece que habria que borrarlo despues
         
         return ingreso;
     }
@@ -84,17 +92,21 @@ public class ServicioUrgencias {
         if (informeAtencion == null || informeAtencion.trim().isEmpty()) {
             throw new RuntimeException("El informe de atención es obligatorio");
         }
-        
-        // Buscar el ingreso en proceso para este paciente
-        // En un sistema real, esto debería estar en una base de datos
-        // Por ahora, asumimos que el proceso se completó correctamente
-        
-        // El ingreso ya debe estar en estado EN_PROCESO después de reclamarlo
-        // Aquí se finalizaría el ingreso cambiando su estado a FINALIZADO
-        // y guardando el informe de atención
-        
-        System.out.println("Atención registrada para paciente: " + cuilPaciente);
-        System.out.println("Médico: " + medico.getNombre() + " " + medico.getApellido());
-        System.out.println("Informe: " + informeAtencion);
+        listaEspera.remove(0);
+        Atencion atencion = new Atencion(ingreso1,medico,informeAtencion );
+        atenciones.add(atencion);
+    }
+    
+    public void registrarAtencionCompleta(Ingreso ingreso, Medico medico, String informeAtencion) {
+        Atencion atencion = new Atencion(ingreso, medico, informeAtencion);
+        this.atenciones.add(atencion);
+    }
+    
+    public List<Atencion> obtenerAtencionesPorMedico(String emailMedico) {
+
+        return atenciones.stream()
+                .filter(atencion -> atencion.getMedico().getEmail().equals(emailMedico))
+                .collect(Collectors.toList());
+
     }
 }

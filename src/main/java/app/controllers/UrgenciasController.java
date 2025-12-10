@@ -2,14 +2,18 @@ package app.controllers;
 
 import app.Services.ServicioUrgencias;
 import app.domain.Ingreso;
+import app.domain.Atencion;
 import app.dtos.IngresoDTO;
 import app.dtos.ReclamarPacienteResponseDTO;
 import app.dtos.AtencionDTO;
+import app.dtos.AtencionResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLOutput;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/urgencias")
@@ -65,6 +69,22 @@ public class UrgenciasController {
                     atencionDTO.getInformeAtencion()
             );
             return ResponseEntity.ok().body("Atención registrada correctamente");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    
+    @GetMapping("/atenciones/medico")
+    public ResponseEntity<?> listarAtencionesMedico(@RequestParam("email") String email) {
+
+        try {
+            List<Atencion> atenciones = servicioUrgencias.obtenerAtencionesPorMedico(email);
+
+            List<AtencionResponseDTO> response = atenciones.stream()
+                    .map(AtencionResponseDTO::new)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

@@ -79,7 +79,6 @@ public class ModuloRegPacientesStepDef {
     public void elSistemaMuestraElMensajeDeError(String mensajeEsperado) {
         assertThat(exceptionEsperada).isNotNull();
 
-        // Verificar que el mensaje de error sea el esperado
         assertThat(exceptionEsperada.getMessage()).isEqualTo(mensajeEsperado);
 
     }
@@ -91,7 +90,6 @@ public class ModuloRegPacientesStepDef {
             String obraSocial = afiliado.get("Obra social");
             String numeroAfiliado = afiliado.get("Numero afiliado");
 
-            // Guardar la afiliación en tu sistema
             dbMockeada.registrarAfiliacion(cuil, obraSocial, numeroAfiliado);
         }
     }

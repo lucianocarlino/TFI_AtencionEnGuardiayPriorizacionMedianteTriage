@@ -51,17 +51,6 @@ public class ServicioAutenticacion {
         return usuarioActual;
     }
 
-    public void crearUsuario(String email, String contrasena, Autoridad autoridad){
-        Optional<Usuario> usuario = dbUsuarios.buscarUsuario(email);
-        if (usuario.isPresent()){
-            throw new RuntimeException("Email existente");
-        } else {
-            Usuario usuarioNuevo = new Usuario(email, contrasena, autoridad);
-            this.usuarios.add(usuarioNuevo);
-            dbUsuarios.guardarUsuario(usuarioNuevo);
-        }
-    }
-
     public void crearUsuario(String email, String contrasena, Autoridad autoridad, String nombre, String apellido){
         Optional<Usuario> usuario = dbUsuarios.buscarUsuario(email);
         if (usuario.isPresent()){

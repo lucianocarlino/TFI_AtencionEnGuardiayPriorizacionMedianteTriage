@@ -47,6 +47,8 @@ public class Ingreso implements Comparable<Ingreso>{
         this.tensionArterial = new TensionArterial(frecuenciaSistolica, frecuenciaDiastolica);
     }
 
+    public Ingreso(){}
+
     public String getCuilPaciente(){
         return this.paciente.getCuil();
     }

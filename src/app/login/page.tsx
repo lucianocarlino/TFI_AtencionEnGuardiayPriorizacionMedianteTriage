@@ -106,23 +106,14 @@ export default function LoginPage() {
             </Button>
           </form>
 
-          <div className="mt-6 text-center">
-            <p className="text-sm text-muted-foreground">
-              ¿No tienes una cuenta?{" "}
-              <Link href="/register" className="text-primary font-medium hover:underline">
-                Registrarse
-              </Link>
-            </p>
-          </div>
-
           <div className="mt-6 p-4 bg-muted rounded-lg">
             <p className="text-sm font-medium text-muted-foreground mb-2">Usuarios de prueba:</p>
             <div className="space-y-1 text-xs text-muted-foreground">
               <p>
-                <strong>Enfermero:</strong> enfermero@hospital.com / pass1
+                <strong>Enfermero:</strong> enfermero@hospital.com / password1
               </p>
               <p>
-                <strong>Médico:</strong> medico@hospital.com / pass3
+                <strong>Médico:</strong> medico@hospital.com / password3
               </p>
             </div>
           </div>
