@@ -37,7 +37,7 @@ public class DBPrueba implements RepositorioPacientes, RepositorioObraSocial, Re
                     "Juan",
                     "Perez",
                     new Afiliado("12", osde),
-                    new Domicilio("Federico", 1138, "San Miguel de Tucuman")
+                    new Domicilio("Chacabuco", 1138, "San Miguel de Tucuman")
 
 
             );
@@ -47,22 +47,24 @@ public class DBPrueba implements RepositorioPacientes, RepositorioObraSocial, Re
                     "Ana",
                     "Martinez",
                     new Afiliado("12", pami),
-                    new Domicilio("Federico", 1138, "San Miguel de Tucuman")
+                    new Domicilio("Ayacucho", 1138, "San Miguel de Tucuman")
             );
             Paciente p3 = new Paciente(
                     "30-12345678-9",
                     "Lionel",
                     "Messi",
                     new Afiliado("13", osde),
-                    new Domicilio("Federico", 1138, "San Miguel de Tucuman")
+                    new Domicilio("Jujuy", 1138, "San Miguel de Tucuman")
             );
+
+            Afiliado a1 = null;
 
             Paciente p4 = new Paciente(
                     "30-98765432-1",
                     "Maria",
                     "Becerra",
-                    new Afiliado("13", pami),
-                    new Domicilio("Federico", 1138, "San Miguel de Tucuman")
+                    new Afiliado("10", osde),
+                    new Domicilio("Catamarca", 1138, "San Miguel de Tucuman")
             );
 
             this.pacientes.add(p1);
