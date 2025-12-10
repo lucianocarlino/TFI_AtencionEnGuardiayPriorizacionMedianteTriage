@@ -44,9 +44,10 @@ public class PacientesController {
             Afiliado afiliado = null;
             if (pacienteDTO.getObraSocial() != null && !pacienteDTO.getObraSocial().isEmpty()) {
                 ObraSocial obraSocial = dbPrueba.buscarObraSocial(pacienteDTO.getObraSocial());
-                if (obraSocial != null) {
-                    afiliado = new Afiliado(pacienteDTO.getNumAfiliado(), obraSocial);
+                if (obraSocial == null) {
+                    return ResponseEntity.badRequest().body("No se puede registrar al paciente con una obra social inexistente");
                 }
+                afiliado = new Afiliado(pacienteDTO.getNumAfiliado(), obraSocial);
             }
 
             servicioPacientes.registrarPaciente(
